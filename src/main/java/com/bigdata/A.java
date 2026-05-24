@@ -12,7 +12,6 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 /**
  * TODO
  *
- * @author
  * @version 1.0
  */
 public class A {

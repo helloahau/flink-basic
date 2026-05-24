@@ -1,10 +1,11 @@
 package com.bigdata.day03.sink;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.apache.flink.api.common.functions.OpenContext;
+import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +14,6 @@ import java.sql.PreparedStatement;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-17 15:43:52
  **/
 public class MyJdbcSink extends RichSinkFunction<Student>{
@@ -33,7 +33,7 @@ public class MyJdbcSink extends RichSinkFunction<Student>{
 
 
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(OpenContext context) throws Exception {
 
         // 这个里面可以编写连接数据库的代码
         // 这个里面编写连接数据库的代码

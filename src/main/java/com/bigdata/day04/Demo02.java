@@ -12,14 +12,14 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
+
+import java.time.Duration;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-08-14 16:14:55
  **/
 public class Demo02 {
@@ -47,7 +47,7 @@ public class Demo02 {
                 return Tuple2.of(word,1);
             }
         }).keyBy(tupel->tupel.f0)
-        .window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
+        .window(TumblingProcessingTimeWindows.of(Duration.ofSeconds(10)))
         .process(new ProcessWindowFunction<Tuple2<String, Integer>, String, String, TimeWindow>() {
             @Override
             public void process(String key, ProcessWindowFunction<Tuple2<String, Integer>, String, String, TimeWindow>.Context context, Iterable<Tuple2<String, Integer>> elements, Collector<String> out) throws Exception {

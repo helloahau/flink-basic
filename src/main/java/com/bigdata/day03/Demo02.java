@@ -3,11 +3,8 @@ package com.bigdata.day03;
 import com.bigdata.day03.sink.MyJdbcSink;
 import com.bigdata.day03.sink.Student;
 import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
-import org.apache.flink.connector.jdbc.JdbcSink;
-import org.apache.flink.connector.jdbc.JdbcStatementBuilder;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -15,7 +12,6 @@ import java.sql.SQLException;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-08-14 09:09:58
  **/
 public class Demo02 {

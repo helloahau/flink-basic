@@ -1,6 +1,6 @@
 package com.bigdata.day04;
 
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.functions.source.legacy.SourceFunction;
 
 import java.util.Random;
 import java.util.UUID;

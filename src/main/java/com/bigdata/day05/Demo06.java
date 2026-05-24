@@ -3,7 +3,7 @@ package com.bigdata.day05;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.shaded.guava30.com.google.common.cache.*;
@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-12-01 17:01:23
  **/
 public class Demo06 {
@@ -48,7 +47,7 @@ public class Demo06 {
             // 定义一个Cache
             LoadingCache<String, String> cache;
             @Override
-            public void open(Configuration parameters) throws Exception {
+            public void open(OpenContext context) throws Exception {
                 // jdbc 纯代码
                 // 这个里面编写连接数据库的代码
                 Class.forName("com.mysql.jdbc.Driver");

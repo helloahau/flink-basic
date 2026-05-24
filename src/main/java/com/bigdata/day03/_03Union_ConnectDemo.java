@@ -11,7 +11,6 @@ import org.apache.flink.streaming.api.functions.co.CoMapFunction;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-17 09:33:03
  **/
 public class _03Union_ConnectDemo {

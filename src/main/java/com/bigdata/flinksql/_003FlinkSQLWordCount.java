@@ -17,7 +17,6 @@ import static org.apache.flink.table.api.Expressions.$;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-19 17:06:52
  **/
 public class _003FlinkSQLWordCount {

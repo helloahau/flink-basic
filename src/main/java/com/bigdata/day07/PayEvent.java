@@ -14,13 +14,4 @@ public class PayEvent {
     private String type;
     private String ts;
 
-    // explicit constructor + getters — Lombok fallback for Maven batch compilation
-    public PayEvent(int userId, String type, String ts) {
-        this.userId = userId;
-        this.type = type;
-        this.ts = ts;
-    }
-    public int getUserId() { return userId; }
-    public String getType() { return type; }
-    public String getTs() { return ts; }
 }

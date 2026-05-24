@@ -10,7 +10,6 @@ import java.io.IOException;
 /**
  * @基本功能:
  * @program:FlinkProject
- * @author: 闫哥
  * @create:2025-12-20 09:22:12
  *
  *   User  Student  Teacher

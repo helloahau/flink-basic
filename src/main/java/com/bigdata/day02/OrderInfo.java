@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.source.ParallelSourceFunction;
-import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
-import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.functions.source.legacy.ParallelSourceFunction;
+import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
+import org.apache.flink.streaming.api.functions.source.legacy.RichSourceFunction;
+import org.apache.flink.streaming.api.functions.source.legacy.SourceFunction;
 
 import java.util.Random;
 import java.util.UUID;
@@ -32,15 +32,6 @@ public class OrderInfo{
     private int money;
     private long timeStamp;
 
-    // explicit setters — Lombok fallback for Maven batch compilation
-    public void setOrderId(String orderId) { this.orderId = orderId; }
-    public void setUid(int uid) { this.uid = uid; }
-    public void setMoney(int money) { this.money = money; }
-    public void setTimeStamp(long timeStamp) { this.timeStamp = timeStamp; }
-    public String getOrderId() { return orderId; }
-    public int getUid() { return uid; }
-    public int getMoney() { return money; }
-    public long getTimeStamp() { return timeStamp; }
 }
 // class MySource extends RichSourceFunction<OrderInfo> {
 //class MySource extends RichParallelSourceFunction<OrderInfo> {

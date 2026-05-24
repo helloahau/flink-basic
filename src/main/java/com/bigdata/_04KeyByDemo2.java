@@ -12,7 +12,6 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-16 17:08:34
  **/
 public class _04KeyByDemo2 {
@@ -25,11 +24,6 @@ public class _04KeyByDemo2 {
         private String name;
         private int num;
 
-        // explicit constructor — Lombok fallback for Maven batch compilation
-        public Ball(String name, int num) {
-            this.name = name;
-            this.num = num;
-        }
      }
 
     public static void main(String[] args) throws Exception {

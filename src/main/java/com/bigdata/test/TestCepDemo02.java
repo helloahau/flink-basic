@@ -23,19 +23,19 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.connector.kafka.source.KafkaSource;
+import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
+import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDeserializationSchema;
 import org.apache.flink.util.OutputTag;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @基本功能:
  * @program:FlinkProject
- * @author: 闫哥
  * @create:2025-12-02 09:10:49
  **/
 
@@ -53,12 +53,15 @@ public class TestCepDemo02 {
         env.setParallelism(1);
 
 
-        Properties properties = new Properties();
-        properties.setProperty("bootstrap.servers","bigdata01:9092");
-        properties.setProperty("group.id","g1");
-        //FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer("topic1",new SimpleStringSchema(), properties);
-        FlinkKafkaConsumer<PayEvent> consumer = new FlinkKafkaConsumer("topic1",new JSONDeserializationSchema<PayEvent>(PayEvent.class), properties);
-        DataStreamSource<PayEvent> ds1 = env.addSource(consumer);
+        // Flink 2.x: FlinkKafkaConsumer removed; use KafkaSource
+        KafkaSource<PayEvent> source = KafkaSource.<PayEvent>builder()
+                .setBootstrapServers("bigdata01:9092")
+                .setTopics("topic1")
+                .setGroupId("g1")
+                .setStartingOffsets(OffsetsInitializer.latest())
+                .setDeserializer(KafkaRecordDeserializationSchema.valueOnly(new JSONDeserializationSchema<PayEvent>(PayEvent.class)))
+                .build();
+        DataStreamSource<PayEvent> ds1 = env.fromSource(source, WatermarkStrategy.noWatermarks(), "KafkaSource");
         ds1.print("ds1:");
         /*
         // 我们写了一个map算子就是为了将json字符串转换为实体，太不划算了。
@@ -97,7 +100,7 @@ public class TestCepDemo02 {
                         return value.getType().equals("pay");
                     }
                 })
-                .within(Time.minutes(10));// 此处的10分钟，一定数据要触发该10分钟的时候才会有结果
+                .within(Duration.ofMinutes(10));// 此处的10分钟，一定数据要触发该10分钟的时候才会有结果
 
         // 使用cep
         //在数据流上用模式匹配

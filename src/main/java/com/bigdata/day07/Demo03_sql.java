@@ -6,7 +6,6 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-12-03 11:12:28
  **/
 public class Demo03_sql {

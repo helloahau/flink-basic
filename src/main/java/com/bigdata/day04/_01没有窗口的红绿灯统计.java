@@ -10,7 +10,6 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-18 09:14:52
  **/
 public class _01没有窗口的红绿灯统计 {

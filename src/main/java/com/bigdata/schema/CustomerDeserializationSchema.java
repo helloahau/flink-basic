@@ -17,7 +17,6 @@ import java.util.List;
 /**
  * @基本功能:
  * @program:FlinkProject
- * @author: 闫哥
  * @create:2025-12-22 11:01:57
  **/
 public class CustomerDeserializationSchema implements DebeziumDeserializationSchema<String> {

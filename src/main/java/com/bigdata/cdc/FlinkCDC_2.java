@@ -13,7 +13,6 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 /**
  * @基本功能:
  * @program:FlinkProject
- * @author: 闫哥
  * @create:2023-12-22 09:54:52
  **/
 class FlinkCDC_2 {

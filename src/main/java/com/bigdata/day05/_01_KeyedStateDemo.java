@@ -5,14 +5,13 @@ import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-19 09:12:30
  **/
 public class _01_KeyedStateDemo {
@@ -42,7 +41,7 @@ public class _01_KeyedStateDemo {
             // 状态采用ValueState  用于保存历史上的最大值
             ValueState<Long> maxValueState = null;
             @Override
-            public void open(Configuration parameters) throws Exception {
+            public void open(OpenContext context) throws Exception {
                 ValueStateDescriptor<Long> stateDescriptor = new ValueStateDescriptor<Long>("valueState",Long.class);
                 maxValueState = getRuntimeContext().getState(stateDescriptor);
             }

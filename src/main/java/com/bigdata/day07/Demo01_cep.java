@@ -1,7 +1,7 @@
 package com.bigdata.day07;
 
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.DateUtils;
+import java.util.Date;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.cep.CEP;
@@ -14,7 +14,6 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.time.Time;
 
 import java.time.Duration;
 import java.util.*;
@@ -22,7 +21,6 @@ import java.util.*;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-12-03 10:01:33
  **/
 public class Demo01_cep {
@@ -70,7 +68,7 @@ public class Demo01_cep {
                     public boolean filter(LoginEvent value) throws Exception {
                         return value.getStatus().equals("fail");
                     }
-                }).times(3).consecutive().within(Time.minutes(10));
+                }).times(3).consecutive().within(Duration.ofMinutes(10));
         // 将我们的规则和流挂钩
         PatternStream<LoginEvent> patternStream = CEP.pattern(ds3, pattern);
 

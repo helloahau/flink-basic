@@ -19,7 +19,6 @@ import java.util.Date;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-16 16:02:48
  **/
 
@@ -34,15 +33,6 @@ class LogBean{
     String method;  // 访问方法
     String path;    // 访问路径
 
-    // explicit constructor — Lombok fallback for Maven batch compilation
-    public LogBean(String ip, int userId, long timestamp, String method, String path) {
-        this.ip = ip;
-        this.userId = userId;
-        this.timestamp = timestamp;
-        this.method = method;
-        this.path = path;
-    }
-    public String getIp() { return ip; }
 }
 
 class _01MapDemo {

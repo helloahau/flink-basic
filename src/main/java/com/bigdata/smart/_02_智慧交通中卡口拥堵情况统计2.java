@@ -5,22 +5,19 @@ import com.bigdata.day04._07WaterMarkDemo03;
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
-import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
-import org.apache.flink.connector.jdbc.JdbcSink;
-import org.apache.flink.connector.jdbc.JdbcStatementBuilder;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
@@ -31,7 +28,6 @@ import java.time.Duration;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-18 15:55:28
  **/
 public class _02_智慧交通中卡口拥堵情况统计2 {
@@ -87,7 +83,7 @@ public class _02_智慧交通中卡口拥堵情况统计2 {
             public String getKey(CarInfo carInfo) throws Exception {
                 return carInfo.getMonitorId();
             }
-        }).window(SlidingEventTimeWindows.of(Time.minutes(1), Time.seconds(30))).apply(new WindowFunction<CarInfo, AverageSpeed, String, TimeWindow>() {
+        }).window(SlidingEventTimeWindows.of(Duration.ofMinutes(1), Duration.ofSeconds(30))).apply(new WindowFunction<CarInfo, AverageSpeed, String, TimeWindow>() {
             @Override
             public void apply(String monitorId, TimeWindow window, Iterable<CarInfo> input, Collector<AverageSpeed> out) throws Exception {
 
@@ -108,30 +104,35 @@ public class _02_智慧交通中卡口拥堵情况统计2 {
             }
         });
 
-        resultStream.print();
+        // Flink 2.x: JdbcSink.sink() returns 1.x SinkFunction incompatible with addSink(); use inline RichSinkFunction
+        resultStream.addSink(new RichSinkFunction<AverageSpeed>() {
+            private transient java.sql.Connection conn;
+            private transient java.sql.PreparedStatement ps;
 
-        //3. transformation-数据处理转换
-        //4. sink-数据输出
-        // 将过滤后的数据写入数据库
-        JdbcConnectionOptions jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withDriverName("com.mysql.cj.jdbc.Driver")
-                .withUrl("jdbc:mysql://node01:3306/smart_transportation")
-                .withUsername("root").withPassword("123456").build();
-        // 将数据写入到mysql中
-        resultStream.addSink(JdbcSink.sink(
-                "insert into t_average_speed values(null,?,?,?,?,?)", new JdbcStatementBuilder<AverageSpeed>() {
-                    @Override
-                    public void accept(PreparedStatement stat, AverageSpeed averageSpeed) throws SQLException {
-                        stat.setLong(1,averageSpeed.getStartTime());
-                        stat.setLong(2,averageSpeed.getEndTime());
-                        stat.setString(3,averageSpeed.getMonitorId());
-                        stat.setDouble(4,averageSpeed.getAvgSpeed());
-                        stat.setInt(5,averageSpeed.getCarCount());
-                    }
-                }, JdbcExecutionOptions.builder().withBatchSize(1).build(), jdbcConnectionOptions
+            @Override
+            public void open(OpenContext context) throws Exception {
+                conn = java.sql.DriverManager.getConnection(
+                        "jdbc:mysql://node01:3306/smart_transportation?useSSL=false&serverTimezone=UTC",
+                        "root", "123456");
+                ps = conn.prepareStatement("insert into t_average_speed values(null,?,?,?,?,?)");
+            }
 
-        ));
+            @Override
+            public void invoke(AverageSpeed averageSpeed, Context context) throws Exception {
+                ps.setLong(1, averageSpeed.getStartTime());
+                ps.setLong(2, averageSpeed.getEndTime());
+                ps.setString(3, averageSpeed.getMonitorId());
+                ps.setDouble(4, averageSpeed.getAvgSpeed());
+                ps.setInt(5, averageSpeed.getCarCount());
+                ps.executeUpdate();
+            }
 
+            @Override
+            public void close() throws Exception {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            }
+        });
 
         //5. execute-执行
         env.execute();

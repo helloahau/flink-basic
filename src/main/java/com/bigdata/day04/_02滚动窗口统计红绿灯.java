@@ -7,12 +7,11 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
+import java.time.Duration;
 
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-18 09:14:52
  **/
 public class _02滚动窗口统计红绿灯 {
@@ -39,7 +38,7 @@ public class _02滚动窗口统计红绿灯 {
             public Integer getKey(Tuple2<Integer, Integer> t2) throws Exception {
                 return t2.f0;
             }
-        }).window(TumblingProcessingTimeWindows.of(Time.seconds(30))).sum(1).print();
+        }).window(TumblingProcessingTimeWindows.of(Duration.ofSeconds(30))).sum(1).print();
         //4. sink-数据输出
 
 

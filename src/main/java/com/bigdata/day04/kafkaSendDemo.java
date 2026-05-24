@@ -10,7 +10,6 @@ import java.util.Random;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  **/
 public class kafkaSendDemo {
 

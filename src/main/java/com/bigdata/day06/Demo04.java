@@ -20,7 +20,6 @@ import static org.apache.flink.table.api.Expressions.$;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-12-02 11:02:46
  **/
 public class Demo04 {

@@ -12,7 +12,6 @@ import org.apache.flink.util.OutputTag;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-11-26 14:21:56
  **/
 public class Demo09_cedao {

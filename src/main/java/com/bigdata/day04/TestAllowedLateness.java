@@ -14,7 +14,6 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
@@ -24,7 +23,6 @@ import java.time.Duration;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-11-28 09:30:26
  **/
 
@@ -60,10 +58,10 @@ public class TestAllowedLateness {
                                 return orderInfo.getTimeStamp();
                             }
                         }
-                )).keyBy(order -> order.getUid()).window(TumblingEventTimeWindows.of(Time.seconds(5)))
+                )).keyBy(order -> order.getUid()).window(TumblingEventTimeWindows.of(Duration.ofSeconds(5)))
 
 
-                .allowedLateness(Time.seconds(10))
+                .allowedLateness(Duration.ofSeconds(10))
 
                 .apply(new WindowFunction<OrderInfo, String, Integer, TimeWindow>() {
                     @Override

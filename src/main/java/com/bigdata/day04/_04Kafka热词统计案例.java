@@ -12,14 +12,13 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
+import java.time.Duration;
 
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-18 10:15:46
  **/
 public class _04Kafka热词统计案例 {
@@ -56,7 +55,7 @@ public class _04Kafka热词统计案例 {
             public String getKey(Tuple2<String, Integer> t2) throws Exception {
                 return t2.f0;
             }
-        }).window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
+        }).window(TumblingProcessingTimeWindows.of(Duration.ofSeconds(10)))
                 .apply(
                         // 第一个泛型是输入数据的类型，第二个泛型是返回值类型   第三个是key 的类型， 第四个是窗口对象
                 new WindowFunction<Tuple2<String, Integer>, Tuple2<String, Integer>, String, TimeWindow>() {

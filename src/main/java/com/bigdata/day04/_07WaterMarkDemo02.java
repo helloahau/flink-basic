@@ -9,11 +9,10 @@ import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.functions.source.legacy.SourceFunction;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
@@ -24,7 +23,6 @@ import java.util.UUID;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-18 14:27:41
  **/
 public class _07WaterMarkDemo02 {
@@ -38,15 +36,6 @@ public class _07WaterMarkDemo02 {
         private int money;
         private long timeStamp;
 
-        // explicit setters/getters — Lombok fallback for Maven batch compilation
-        public void setOrderId(String orderId) { this.orderId = orderId; }
-        public void setUid(int uid) { this.uid = uid; }
-        public void setMoney(int money) { this.money = money; }
-        public void setTimeStamp(long timeStamp) { this.timeStamp = timeStamp; }
-        public int getUid() { return uid; }
-        public int getMoney() { return money; }
-        public long getTimeStamp() { return timeStamp; }
-        public String getOrderId() { return orderId; }
     }
 
     // 自定义source , 每隔1秒钟生成一个订单
@@ -93,7 +82,7 @@ public class _07WaterMarkDemo02 {
                         return orderInfo.getTimeStamp();
                     }
                 }
-        )).keyBy(orderInfo -> orderInfo.getUid()).window(TumblingEventTimeWindows.of(Time.seconds(5))).apply(new WindowFunction<OrderInfo, String, Integer, TimeWindow>() {
+        )).keyBy(orderInfo -> orderInfo.getUid()).window(TumblingEventTimeWindows.of(Duration.ofSeconds(5))).apply(new WindowFunction<OrderInfo, String, Integer, TimeWindow>() {
             @Override
             public void apply(Integer integer, TimeWindow window, Iterable<OrderInfo> input, Collector<String> out) throws Exception {
                 long start = window.getStart();

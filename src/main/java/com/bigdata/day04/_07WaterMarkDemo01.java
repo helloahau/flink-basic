@@ -6,17 +6,16 @@ import lombok.NoArgsConstructor;
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.functions.source.legacy.SourceFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 
 import java.util.Random;
 import java.util.UUID;
+import java.time.Duration;
 
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-18 14:27:41
  **/
 public class _07WaterMarkDemo01 {
@@ -30,15 +29,6 @@ public class _07WaterMarkDemo01 {
         private int money;
         private long timeStamp;
 
-        // explicit setters/getters — Lombok fallback for Maven batch compilation
-        public void setOrderId(String orderId) { this.orderId = orderId; }
-        public void setUid(int uid) { this.uid = uid; }
-        public void setMoney(int money) { this.money = money; }
-        public void setTimeStamp(long timeStamp) { this.timeStamp = timeStamp; }
-        public int getUid() { return uid; }
-        public int getMoney() { return money; }
-        public long getTimeStamp() { return timeStamp; }
-        public String getOrderId() { return orderId; }
     }
 
     // 自定义source , 每隔1秒钟生成一个订单
@@ -78,7 +68,7 @@ public class _07WaterMarkDemo01 {
 
         //3. transformation-数据处理转换
         // 每隔5秒计算5秒内的每一个用户的订单总额
-        dataStreamSource.keyBy(orderInfo -> orderInfo.getUid()).window(TumblingProcessingTimeWindows.of(Time.seconds(5))).sum("money").print();
+        dataStreamSource.keyBy(orderInfo -> orderInfo.getUid()).window(TumblingProcessingTimeWindows.of(Duration.ofSeconds(5))).sum("money").print();
         //4. sink-数据输出
 
 

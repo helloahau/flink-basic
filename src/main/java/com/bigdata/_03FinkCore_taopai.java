@@ -7,6 +7,7 @@ import com.bigdata.smart.Violation;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFilterFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -15,11 +16,7 @@ import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
-import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
-import org.apache.flink.connector.jdbc.JdbcSink;
-import org.apache.flink.connector.jdbc.JdbcStatementBuilder;
+import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -27,7 +24,6 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
@@ -39,7 +35,6 @@ import java.util.Comparator;
 /**
  * @基本功能:
  * @program:Smart_Tran
- * @author: 闫哥
  * @create:2025-11-28 11:46:03
  **/
 public class _03FinkCore_taopai {
@@ -80,7 +75,7 @@ public class _03FinkCore_taopai {
             ListState<CarInfo> preCarInfo = null;
 
             @Override
-            public void open(Configuration parameters) throws Exception {
+            public void open(OpenContext context) throws Exception {
                 ListStateDescriptor<CarInfo> stateDescriptor = new ListStateDescriptor<CarInfo>("listState", CarInfo.class);
                 preCarInfo = getRuntimeContext().getListState(stateDescriptor);
             }
@@ -130,24 +125,34 @@ public class _03FinkCore_taopai {
 
         // 将结果保存到mysql
 
-        JdbcConnectionOptions jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withUrl("jdbc:mysql://localhost:3306/smart_transportation")
-                .withDriverName("com.mysql.cj.jdbc.Driver")
-                .withUsername("root").withPassword("123456").build();
+        // Flink 2.x: JdbcSink.sink() returns 1.x SinkFunction incompatible with addSink(); use inline RichSinkFunction
+        // Flink 2.x: JdbcSink.sink() returns 1.x SinkFunction incompatible with addSink(); use inline RichSinkFunction
+        resultStream.addSink(new RichSinkFunction<Violation>() {
+            private transient Connection conn;
+            private transient PreparedStatement ps;
 
-        // 如何把结果保存到 mysql
-        resultStream.addSink(JdbcSink.sink(
-                "insert into t_violation_list values (null,?,?,?)",
-                new JdbcStatementBuilder<Violation>() {
-                    @Override
-                    public void accept(PreparedStatement preparedStatement, Violation violation) throws SQLException {
-                        preparedStatement.setString(1,violation.getCar());
-                        preparedStatement.setString(2, violation.getViolation());
-                        preparedStatement.setLong(3,violation.getCreateTime());
-                    }
-                }, JdbcExecutionOptions.builder().withBatchSize(1).build(),jdbcConnectionOptions
+            @Override
+            public void open(OpenContext context) throws Exception {
+                conn = DriverManager.getConnection(
+                        "jdbc:mysql://localhost:3306/smart_transportation?useSSL=false&serverTimezone=UTC",
+                        "root", "123456");
+                ps = conn.prepareStatement("insert into t_violation_list values (null,?,?,?)");
+            }
 
-        ));
+            @Override
+            public void invoke(Violation violation, Context context) throws Exception {
+                ps.setString(1, violation.getCar());
+                ps.setString(2, violation.getViolation());
+                ps.setLong(3, violation.getCreateTime());
+                ps.executeUpdate();
+            }
+
+            @Override
+            public void close() throws Exception {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            }
+        });
 
 
         env.execute();

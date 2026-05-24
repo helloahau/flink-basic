@@ -1,18 +1,15 @@
 package com.bigdata.day03.sink;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.flink.api.common.RuntimeExecutionMode;
-import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
-import org.apache.flink.connector.jdbc.JdbcSink;
-import org.apache.flink.connector.jdbc.JdbcStatementBuilder;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 @Data
 @NoArgsConstructor
@@ -22,20 +19,10 @@ public class Student{
     private String name;
     private int age;
 
-    // explicit constructor + getters — Lombok fallback for Maven batch compilation
-    public Student(int id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public int getAge() { return age; }
 }
 class _04JDBCSink {
 
     public static void main(String[] args) throws Exception {
-        //1. env-准备环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
         DataStreamSource<Student> dataStreamSource = env.fromElements(
@@ -44,22 +31,31 @@ class _04JDBCSink {
                 new Student(3, "王五", 20)
         );
 
-        JdbcConnectionOptions jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withDriverName("com.mysql.cj.jdbc.Driver")
-                .withUrl("jdbc:mysql://node01:3306/gongcheng")
-                .withUsername("root").withPassword("123456").build();
-        // 将数据写入到mysql中
-        dataStreamSource.addSink(JdbcSink.sink(
-                "insert into stu values(?,?,?)", new JdbcStatementBuilder<Student>() {
-                    @Override
-                    public void accept(PreparedStatement stat, Student student) throws SQLException {
-                        stat.setInt(1, student.getId());
-                        stat.setString(2, student.getName());
-                        stat.setInt(3, student.getAge());
-                    }
-                }, jdbcConnectionOptions
+        // Flink 2.x: JdbcSink.sink() returns 1.x SinkFunction, incompatible with addSink(); use inline RichSinkFunction
+        dataStreamSource.addSink(new RichSinkFunction<Student>() {
+            private transient Connection conn;
+            private transient PreparedStatement ps;
 
-        ));
+            @Override
+            public void open(OpenContext context) throws Exception {
+                conn = DriverManager.getConnection("jdbc:mysql://node01:3306/gongcheng", "root", "123456");
+                ps = conn.prepareStatement("insert into stu values(?,?,?)");
+            }
+
+            @Override
+            public void invoke(Student student, Context context) throws Exception {
+                ps.setInt(1, student.getId());
+                ps.setString(2, student.getName());
+                ps.setInt(3, student.getAge());
+                ps.executeUpdate();
+            }
+
+            @Override
+            public void close() throws Exception {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            }
+        });
 
         env.execute();
     }

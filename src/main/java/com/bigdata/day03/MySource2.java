@@ -1,9 +1,9 @@
 package com.bigdata.day03;
 
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
+import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ class MySource2 extends RichParallelSourceFunction<String> {
 
     // ctrl + o 可以提示都有哪些方法可以被重写
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(OpenContext context) throws Exception {
         System.out.println("这个方法可以做初始化");
     }
 

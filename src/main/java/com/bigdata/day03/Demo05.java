@@ -9,12 +9,12 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
+
+import java.time.Duration;
 
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-08-14 16:14:55
  **/
 public class Demo05 {
@@ -42,7 +42,7 @@ public class Demo05 {
                 return Tuple2.of(word,1);
             }
         }).keyBy(tupel->tupel.f0)
-                .window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
+                .window(TumblingProcessingTimeWindows.of(Duration.ofSeconds(10)))
                         .sum(1).print();
         //4. sink-数据输出
 

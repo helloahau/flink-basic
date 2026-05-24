@@ -1,7 +1,6 @@
 package com.bigdata.day07;
 
 import com.alibaba.fastjson.JSON;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -20,15 +19,13 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.Date;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-12-03 10:01:33
  **/
 public class Demo02_cep {
@@ -39,21 +36,21 @@ public class Demo02_cep {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        // 获取kafka数据的第一种方案
-        /*KafkaSource<String> kafkaSource = KafkaSource.<String>builder().setBootstrapServers("localhost:9092").setTopics("first").setStartingOffsets(OffsetsInitializer.latest()).setValueOnlyDeserializer(new SimpleStringSchema()).build();
+        KafkaSource<String> kafkaSource = KafkaSource.<String>builder()
+                .setBootstrapServers("localhost:9092")
+                .setTopics("first")
+                .setGroupId("g1")
+                .setStartingOffsets(OffsetsInitializer.latest())
+                .setValueOnlyDeserializer(new SimpleStringSchema())
+                .build();
 
-        DataStreamSource<String> ds1 = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "kafkaSource");*/
-        // 获取kafka的第二种方案：
-        Properties properties = new Properties();
-        properties.setProperty("bootstrap.servers","localhost:9092");
-        properties.setProperty("group.id","g1");
-        FlinkKafkaConsumer<String> consumer = new FlinkKafkaConsumer("first",new SimpleStringSchema(), properties);
-        SingleOutputStreamOperator<PayEvent> ds1 = env.addSource(consumer).map(new MapFunction<String, PayEvent>() {
-            @Override
-            public PayEvent map(String value) throws Exception {
-                return JSON.parseObject(value, PayEvent.class);
-            }
-        });
+        SingleOutputStreamOperator<PayEvent> ds1 = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "kafkaSource")
+                .map(new MapFunction<String, PayEvent>() {
+                    @Override
+                    public PayEvent map(String value) throws Exception {
+                        return JSON.parseObject(value, PayEvent.class);
+                    }
+                });
 
 
         SingleOutputStreamOperator<PayEvent> ds2 = ds1.assignTimestampsAndWatermarks(
@@ -86,7 +83,7 @@ public class Demo02_cep {
                     public boolean filter(PayEvent payEvent, Context<PayEvent> context) throws Exception {
                         return payEvent.getType().equals("pay");
                     }
-                }).within(Time.minutes(10));
+                }).within(Duration.ofMinutes(10));
         // 将我们的规则和流挂钩
         PatternStream<PayEvent> patternStream = CEP.pattern(ds3, pattern);
 

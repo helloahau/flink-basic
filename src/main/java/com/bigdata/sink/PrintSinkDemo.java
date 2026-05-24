@@ -3,7 +3,7 @@ package com.bigdata.sink;
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 
 
 class PrintSinkDemo extends RichSinkFunction<Long> {
@@ -21,7 +21,7 @@ class PrintSinkDemo extends RichSinkFunction<Long> {
     @Override
     public void invoke(Long value, Context context) throws Exception {
         // 开始定义需要输出的格式
-        int partitionNum = getRuntimeContext().getIndexOfThisSubtask() + 1;
+        int partitionNum = getRuntimeContext().getTaskInfo().getIndexOfThisSubtask() + 1;
         if(msg == null){
             System.out.println(partitionNum+"> "+value);
         }else{

@@ -14,7 +14,6 @@ import org.apache.flink.util.Collector;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-16 16:16:00
  **/
 public class _02FlatMapDemo {

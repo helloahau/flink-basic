@@ -14,7 +14,6 @@ import org.apache.flink.util.Collector;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-11-27 16:01:10
  **/
 public class Demo08 {

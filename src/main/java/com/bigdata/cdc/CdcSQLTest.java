@@ -11,7 +11,6 @@ import org.apache.flink.types.Row;
 /**
  * @基本功能:
  * @program:FlinkProject
- * @author: 闫哥
  * @create:2025-06-13 11:01:11
  **/
 public class CdcSQLTest {

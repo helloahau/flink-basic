@@ -1,6 +1,6 @@
 package com.bigdata;
 
-import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.util.ParameterTool;
 
 // 测试传参时，带有--input 字样
 public class B {

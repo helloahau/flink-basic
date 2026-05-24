@@ -16,7 +16,6 @@ import java.util.Date;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-16 17:02:54
  **/
 public class _03FilterDemo {

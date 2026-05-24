@@ -8,7 +8,6 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-20 09:29:01
  *
  * 该案例主要用于测试flink中的connector 的用法，无特殊的实战意义

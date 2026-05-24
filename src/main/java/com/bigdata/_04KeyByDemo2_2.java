@@ -9,7 +9,6 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 /**
  * @基本功能:
  * @program:FlinkDemo2
- * @author: 闫哥
  * @create:2025-04-16 17:08:34
  **/
 class _04KeyByDemo2_2 {
@@ -40,7 +39,7 @@ class _04KeyByDemo2_2 {
         }).sum(1).print();*/
         // 简化版本
         //dataStreamSource.keyBy(ball->ball.getName()).sum("num").print();
-        dataStreamSource.keyBy("name").sum("num").print();
+        dataStreamSource.keyBy(ball -> ball.getName()).sum("num").print();
 
         //4. sink-数据输出
 

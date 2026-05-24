@@ -11,7 +11,6 @@ import org.apache.flink.types.Row;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-12-02 10:11:04
  **/
 public class Demo01 {

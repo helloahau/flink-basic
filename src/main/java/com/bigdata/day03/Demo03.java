@@ -16,7 +16,6 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 /**
  * @基本功能:
  * @program:FlinkDemo
- * @author: 闫哥
  * @create:2025-08-14 09:49:26
  **/
 public class Demo03 {
