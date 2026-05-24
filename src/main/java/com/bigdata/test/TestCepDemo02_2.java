@@ -1,7 +1,7 @@
 package com.bigdata.test;
 
-import com.alibaba.fastjson2.JSON;
-import com.bigdata.bean.PayEvent;
+import com.alibaba.fastjson.JSON;
+import com.bigdata.day07.PayEvent;
 import com.bigdata.schema.JSONDeserializationSchema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +27,7 @@ import java.util.Properties;
 //{"userId":"1","type":"pay","ts":"2023-07-18 10:14:11"}
 //{"userId":"1","type":"pay","ts":"2023-07-18 10:14:11"}
 //{"userId":"1","type":"xxx","ts":"2023-07-18 10:14:12"}
-public class TestCepDemo02 {
+class TestCepDemo02_2 {
 
 
     public static void main(String[] args) throws Exception {

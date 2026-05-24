@@ -26,11 +26,21 @@ import java.util.UUID;
 @Data  // set get toString
 @AllArgsConstructor
 @NoArgsConstructor
-class OrderInfo{
+public class OrderInfo{
     private String orderId;
     private int uid;
     private int money;
     private long timeStamp;
+
+    // explicit setters — Lombok fallback for Maven batch compilation
+    public void setOrderId(String orderId) { this.orderId = orderId; }
+    public void setUid(int uid) { this.uid = uid; }
+    public void setMoney(int money) { this.money = money; }
+    public void setTimeStamp(long timeStamp) { this.timeStamp = timeStamp; }
+    public String getOrderId() { return orderId; }
+    public int getUid() { return uid; }
+    public int getMoney() { return money; }
+    public long getTimeStamp() { return timeStamp; }
 }
 // class MySource extends RichSourceFunction<OrderInfo> {
 //class MySource extends RichParallelSourceFunction<OrderInfo> {
@@ -58,7 +68,7 @@ class MySource implements SourceFunction<OrderInfo> {
         flag = false;
     }
 }
-public class CustomSource {
+class CustomSource {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

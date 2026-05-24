@@ -30,7 +30,7 @@ class MySource2 extends RichParallelSourceFunction<String> {
 
     }
 }
-public class _07自定义数据源之Rich {
+class _07自定义数据源之Rich {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

@@ -1,7 +1,7 @@
 package com.bigdata.test;
 
-import com.alibaba.fastjson2.JSON;
-import com.bigdata.bean.PayEvent;
+import com.alibaba.fastjson.JSON;
+import com.bigdata.day07.PayEvent;
 import com.bigdata.schema.JSONDeserializationSchema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -70,11 +70,14 @@ public class TestCepDemo02 {
         }).print();*/
         SingleOutputStreamOperator<PayEvent> ds2 = ds1.assignTimestampsAndWatermarks(WatermarkStrategy.<PayEvent>forBoundedOutOfOrderness(Duration.ofSeconds(5)).withTimestampAssigner(
                 new SerializableTimestampAssigner<PayEvent>() {
-                    @SneakyThrows
                     @Override
                     public long extractTimestamp(PayEvent element, long recordTimestamp) {
-                        long time = DateUtils.parseDate(element.getTs(), "yyyy-MM-dd HH:mm:ss").getTime();
-                        return time;
+                        try {
+                            long time = DateUtils.parseDate(element.getTs(), "yyyy-MM-dd HH:mm:ss").getTime();
+                            return time;
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
         ));
@@ -107,7 +110,7 @@ public class TestCepDemo02 {
         SingleOutputStreamOperator<String> ds3 = patternStream.select(outputTag, new PatternTimeoutFunction<PayEvent, String>() {
             @Override
             public String timeout(Map<String, List<PayEvent>> map, long l) throws Exception {
-                return map.get("first").get(0).getUserId();
+                return String.valueOf(map.get("first").get(0).getUserId());
             }
         }, new PatternSelectFunction<PayEvent, String>() {
             @Override
@@ -116,7 +119,7 @@ public class TestCepDemo02 {
                 // return userId;
                 System.out.println("select.......");
                 System.out.println(map);
-                return map.get("first").get(0).getUserId();
+                return String.valueOf(map.get("first").get(0).getUserId());
             }
         });
         ds3.print("正常的ID(先creat,后pay的用户)：");

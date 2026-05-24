@@ -30,7 +30,7 @@ class PrintSinkDemo extends RichSinkFunction<Long> {
 
     }
 }
-public class _01_SinkDemo {
+class _01_SinkDemo {
 
 
 

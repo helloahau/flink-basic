@@ -37,6 +37,16 @@ public class _07WaterMarkDemo02 {
         private int uid;
         private int money;
         private long timeStamp;
+
+        // explicit setters/getters — Lombok fallback for Maven batch compilation
+        public void setOrderId(String orderId) { this.orderId = orderId; }
+        public void setUid(int uid) { this.uid = uid; }
+        public void setMoney(int money) { this.money = money; }
+        public void setTimeStamp(long timeStamp) { this.timeStamp = timeStamp; }
+        public int getUid() { return uid; }
+        public int getMoney() { return money; }
+        public long getTimeStamp() { return timeStamp; }
+        public String getOrderId() { return orderId; }
     }
 
     // 自定义source , 每隔1秒钟生成一个订单

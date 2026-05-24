@@ -59,12 +59,15 @@ public class Demo02_cep {
         SingleOutputStreamOperator<PayEvent> ds2 = ds1.assignTimestampsAndWatermarks(
                 WatermarkStrategy.<PayEvent>forBoundedOutOfOrderness(Duration.ZERO)
                         .withTimestampAssigner(new SerializableTimestampAssigner<PayEvent>() {
-                            @SneakyThrows
                             @Override
                             public long extractTimestamp(PayEvent element, long recordTimestamp) {
-                                Date date = DateUtils.parseDate(element.getTs(), "yyyy-MM-dd HH:mm:ss");
-                                // 返回值是毫秒
-                                return date.getTime();
+                                try {
+                                    Date date = DateUtils.parseDate(element.getTs(), "yyyy-MM-dd HH:mm:ss");
+                                    // 返回值是毫秒
+                                    return date.getTime();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         })
         );

@@ -12,7 +12,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
  * @author: 闫哥
  * @create:2025-04-16 17:08:34
  **/
-public class _04KeyByDemo2 {
+class _04KeyByDemo2_2 {
 
 
 

@@ -17,7 +17,7 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
-public class WordCount02 {
+class WordCount02_2 {
 
     public static void main(String[] args) throws Exception {
 

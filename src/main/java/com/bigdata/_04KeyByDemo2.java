@@ -24,6 +24,12 @@ public class _04KeyByDemo2 {
     static class Ball {
         private String name;
         private int num;
+
+        // explicit constructor — Lombok fallback for Maven batch compilation
+        public Ball(String name, int num) {
+            this.name = name;
+            this.num = num;
+        }
      }
 
     public static void main(String[] args) throws Exception {

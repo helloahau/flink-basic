@@ -13,7 +13,7 @@ import java.util.Arrays;
  * Desc 演示Flink-DataStream-流批一体API完成批处理WordCount
  * 使用Java8的lambda表示完成函数式风格的WordCount
  */
-public class WordCount02 {
+class WordCount02 {
     public static void main(String[] args) throws Exception {
         //TODO 1.env-准备环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -65,7 +65,7 @@ public class WordCount02 {
                 return Tuple2.of(value, 1);
             }
         });*/
-        DataStream<Tuple2<, Integer>> wordAndOneDS = wordsDS.map(
+        DataStream<Tuple2<String, Integer>> wordAndOneDS = wordsDS.map(
             (String value) -> Tuple2.of(value, 1)
         ).returns(Types.TUPLE(Types.STRING, Types.INT));
 

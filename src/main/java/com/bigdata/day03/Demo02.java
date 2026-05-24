@@ -1,5 +1,7 @@
 package com.bigdata.day03;
 
+import com.bigdata.day03.sink.MyJdbcSink;
+import com.bigdata.day03.sink.Student;
 import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
 import org.apache.flink.connector.jdbc.JdbcSink;
 import org.apache.flink.connector.jdbc.JdbcStatementBuilder;

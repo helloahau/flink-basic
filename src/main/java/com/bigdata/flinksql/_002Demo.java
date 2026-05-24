@@ -1,5 +1,6 @@
 package com.bigdata.flinksql;
 
+import com.bigdata.WaterSensor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

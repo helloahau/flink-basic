@@ -13,6 +13,7 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
+import com.bigdata.sql.WC;
 
 import static org.apache.flink.table.api.Expressions.$;
 

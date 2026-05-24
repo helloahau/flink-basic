@@ -13,7 +13,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
 
-public class WordCount01 {
+class WordCount01_2 {
 
     /**
      * 1. env-准备环境

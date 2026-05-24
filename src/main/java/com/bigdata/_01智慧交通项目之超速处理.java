@@ -1,7 +1,7 @@
 package com.bigdata;
 
 import com.alibaba.fastjson.JSON;
-import com.bigdata.pojo.CarInfo;
+import com.bigdata.smart.CarInfo;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -115,7 +115,7 @@ public class _01智慧交通项目之超速处理 {
                         preparedStatement.setString(2, carInfo.getMonitorId());
                         preparedStatement.setString(3, carInfo.getRoadId());
                         preparedStatement.setDouble(4, carInfo.getSpeed());
-                        preparedStatement.setInt(5, carInfo.getLimitSpeed());
+                        preparedStatement.setInt(5, (int) carInfo.getLimitSpeed());
                         preparedStatement.setLong(6, carInfo.getActionTime());
 
                     }

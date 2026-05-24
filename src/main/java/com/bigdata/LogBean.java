@@ -33,9 +33,19 @@ class LogBean{
     long timestamp; // 访问时间戳
     String method;  // 访问方法
     String path;    // 访问路径
+
+    // explicit constructor — Lombok fallback for Maven batch compilation
+    public LogBean(String ip, int userId, long timestamp, String method, String path) {
+        this.ip = ip;
+        this.userId = userId;
+        this.timestamp = timestamp;
+        this.method = method;
+        this.path = path;
+    }
+    public String getIp() { return ip; }
 }
 
-public class _01MapDemo {
+class _01MapDemo {
 
     public static void main(String[] args) throws Exception {
 

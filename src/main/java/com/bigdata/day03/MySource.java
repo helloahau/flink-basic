@@ -19,7 +19,7 @@ class MySource implements ParallelSourceFunction<String>{
 
     }
 }
-public class _06自定义并列的Source {
+class _06自定义并列的Source {
 
 
     public static void main(String[] args) throws Exception {

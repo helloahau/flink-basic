@@ -16,7 +16,7 @@ import java.sql.PreparedStatement;
  * @author: 闫哥
  * @create:2025-04-17 15:43:52
  **/
-class MyJdbcSink extends RichSinkFunction<Student>{
+public class MyJdbcSink extends RichSinkFunction<Student>{
 
     Connection conn = null;
     PreparedStatement ps = null;
@@ -51,7 +51,7 @@ class MyJdbcSink extends RichSinkFunction<Student>{
     }
 }
 
-public class _07CustomSinkDemo {
+class _07CustomSinkDemo {
 
     public static void main(String[] args) throws Exception {
 

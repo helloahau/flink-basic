@@ -17,12 +17,22 @@ import java.sql.SQLException;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class Student{
+public class Student{
     private int id;
     private String name;
     private int age;
+
+    // explicit constructor + getters — Lombok fallback for Maven batch compilation
+    public Student(int id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public int getAge() { return age; }
 }
-public class _04JDBCSink {
+class _04JDBCSink {
 
     public static void main(String[] args) throws Exception {
         //1. env-准备环境

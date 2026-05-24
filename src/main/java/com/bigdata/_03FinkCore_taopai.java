@@ -1,9 +1,9 @@
 package com.bigdata;
 
 import com.alibaba.fastjson.JSON;
-import com.bigdata.pojo.AverageSpeed;
-import com.bigdata.pojo.CarInfo;
-import com.bigdata.pojo.Violation;
+import com.bigdata.smart.AverageSpeed;
+import com.bigdata.smart.CarInfo;
+import com.bigdata.smart.Violation;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;

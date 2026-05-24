@@ -1,3 +1,9 @@
+package com.bigdata;
+
+import org.apache.flink.api.common.RuntimeExecutionMode;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
 public class _01_SinkDemo {
 
 

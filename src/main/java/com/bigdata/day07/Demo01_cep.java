@@ -48,12 +48,15 @@ public class Demo01_cep {
         SingleOutputStreamOperator<LoginEvent> ds2 = ds1.assignTimestampsAndWatermarks(
                 WatermarkStrategy.<LoginEvent>forBoundedOutOfOrderness(Duration.ZERO)
                         .withTimestampAssigner(new SerializableTimestampAssigner<LoginEvent>() {
-                            @SneakyThrows
                             @Override
                             public long extractTimestamp(LoginEvent element, long recordTimestamp) {
-                                Date date = DateUtils.parseDate(element.getLoginTime(), "yyyy-MM-dd HH:mm:ss");
-                                // 返回值是毫秒
-                                return date.getTime();
+                                try {
+                                    Date date = DateUtils.parseDate(element.getLoginTime(), "yyyy-MM-dd HH:mm:ss");
+                                    // 返回值是毫秒
+                                    return date.getTime();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         })
         );
