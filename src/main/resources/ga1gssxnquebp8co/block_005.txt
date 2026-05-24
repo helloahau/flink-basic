@@ -1,0 +1,1 @@
+xsync.sh /opt/installs/flink/lib/commons-cli-1.5.0.jar

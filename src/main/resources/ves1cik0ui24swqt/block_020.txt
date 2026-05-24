@@ -1,0 +1,7 @@
+启动集群：
+1) start-dfs.sh
+2) zk.sh start
+3) kf.sh start
+-- flink中的服务，不上线的话，可以不启动
+4) start-cluster.sh
+5) historyserver.sh start

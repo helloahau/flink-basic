@@ -1,0 +1,1244 @@
+[
+  {
+    "doc": "Windows版本的kafka的搭建与使用",
+    "slug": "nuykp00iwcgic2qa",
+    "kind": "shell",
+    "file": "src/main/resources/nuykp00iwcgic2qa/block_000.txt"
+  },
+  {
+    "doc": "Windows版本的kafka的搭建与使用",
+    "slug": "nuykp00iwcgic2qa",
+    "kind": "shell",
+    "file": "src/main/resources/nuykp00iwcgic2qa/block_001.txt"
+  },
+  {
+    "doc": "大数据技术之Flink优化",
+    "slug": "wiq1t6e6i5on9bgi",
+    "kind": "xml",
+    "file": "src/main/resources/wiq1t6e6i5on9bgi/block_000.xml"
+  },
+  {
+    "doc": "大数据技术之Flink优化",
+    "slug": "wiq1t6e6i5on9bgi",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/LocalKeyByFlatMapFunc.java"
+  },
+  {
+    "doc": "大数据技术之Flink优化",
+    "slug": "wiq1t6e6i5on9bgi",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/wiq1t6e6i5on9bgi/Snippet_002.java"
+  },
+  {
+    "doc": "大数据技术之Flink优化",
+    "slug": "wiq1t6e6i5on9bgi",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/wiq1t6e6i5on9bgi/Snippet_003.java"
+  },
+  {
+    "doc": "大数据技术之Flink优化",
+    "slug": "wiq1t6e6i5on9bgi",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/wiq1t6e6i5on9bgi/Snippet_004.java"
+  },
+  {
+    "doc": "大数据技术之Flink优化",
+    "slug": "wiq1t6e6i5on9bgi",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/wiq1t6e6i5on9bgi/Snippet_005.java"
+  },
+  {
+    "doc": "大数据技术之Flink优化",
+    "slug": "wiq1t6e6i5on9bgi",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/wiq1t6e6i5on9bgi/Snippet_006.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_001.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "properties",
+    "file": "src/main/resources/iqbixxys9icdza0s/block_001.properties"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day07/LoginEvent.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day07/Demo01_cep.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_003.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_004.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_005.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_006.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day07/PayEvent.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day07/Demo02_cep.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/test/TestCepDemo02.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_007.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day07/Demo03_sql.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_008.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/schema/JSONDeserializationSchema.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/test/TestCepDemo02_2.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_009.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/cdc/FlinkCDC.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_010.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_011.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/cdc/FlinkCDC_2.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_012.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/schema/CustomerDeserializationSchema.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/cdc/CdcSQLTest.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "shell",
+    "file": "src/main/resources/iqbixxys9icdza0s/block_012.txt"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_014.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/iqbixxys9icdza0s/Snippet_015.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/twophase/SocketToKafkaTwoPhaseDemo.java"
+  },
+  {
+    "doc": "Day06-Flink-高级部分",
+    "slug": "iqbixxys9icdza0s",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/twophase/KafkaExactlyOnceDemo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "xml",
+    "file": "src/main/resources/pb9wqs8sv708mmpl/block_000.xml"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "xml",
+    "file": "src/main/resources/pb9wqs8sv708mmpl/block_001.xml"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_001Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_003.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_004.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day06/Demo01.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_005.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_006.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_007.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_008.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_009.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_010.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_011.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_012.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_013.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_014.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/WaterSensor.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/_002Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_015.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/_003FlinkSQLWordCount.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_016.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/sql/WC.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day06/Demo04.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_017.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_001Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "xml",
+    "file": "src/main/resources/pb9wqs8sv708mmpl/block_017.xml"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_002Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_019.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_020.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "xml",
+    "file": "src/main/resources/pb9wqs8sv708mmpl/block_020.xml"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_022.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_023.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_003Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_004Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_005Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_024.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_025.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_006Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_026.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_007Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/flinksql/day02/_008Demo.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/pb9wqs8sv708mmpl/Snippet_027.java"
+  },
+  {
+    "doc": "Day05-FlinkSQL",
+    "slug": "pb9wqs8sv708mmpl",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/smart/_05_智慧交通超速车辆sql版本.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day05/_01_KeyedStateDemo.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ga1gssxnquebp8co/Snippet_001.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/smart/Violation.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_03FinkCore_taopai.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day06/_01CheckPointDemo.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ga1gssxnquebp8co/Snippet_002.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ga1gssxnquebp8co/Snippet_003.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ga1gssxnquebp8co/Snippet_004.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ga1gssxnquebp8co/Snippet_005.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "shell",
+    "file": "src/main/resources/ga1gssxnquebp8co/block_005.txt"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ga1gssxnquebp8co/Snippet_007.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day05/_03_RestartDemo.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day05/Demo04.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ga1gssxnquebp8co/Snippet_008.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day05/Demo05.java"
+  },
+  {
+    "doc": "Day04-Flink四大基石2",
+    "slug": "ga1gssxnquebp8co",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day05/Demo06.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_001.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_002.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_01没有窗口的红绿灯统计.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_02滚动窗口统计红绿灯.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_03滑动窗口统计红绿灯.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/kafkaSendDemo.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/Demo05.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_04Kafka热词统计案例.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_04Kafka热词统计案例2.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/Demo02.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_003.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_05QuanLiangDemo.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/Demo05_reduce.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_004.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_06ZengLiangDemo.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/Demo08.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_005.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_07WaterMarkDemo01.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_006.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_007.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_07WaterMarkDemo02.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_008.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_009.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/_07WaterMarkDemo03.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_010.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/smart/AverageSpeed.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/smart/_02_智慧交通中卡口拥堵情况统计.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/smart/_02_智慧交通中卡口拥堵情况统计2.java"
+  },
+  {
+    "doc": "Day03-Flink四大基石",
+    "slug": "cam5acsuc1c9pehx",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/cam5acsuc1c9pehx/Snippet_011.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/CreateOrderInfoJson.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day04/TestAllowedLateness.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_001.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_002.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_003.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_004.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_005.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_006.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_007.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_008.java"
+  },
+  {
+    "doc": "eventTime-watermarker",
+    "slug": "sanl8zvppg33tu3u",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/sanl8zvppg33tu3u/Snippet_009.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/TestSource01.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/TestSource02.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day02/Demo03.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_001.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/TestSource04.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day02/Demo05.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/_05KafkaSourceDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day02/OrderInfo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/MySource.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_002.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/MySource2.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_003.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_004.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_005.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "xml",
+    "file": "src/main/resources/ves1cik0ui24swqt/block_005.xml"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/LogBean.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_01MapDemo2.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_02FlatMapDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_03FilterDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_007.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_008.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_009.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/PeopleCount.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_010.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_011.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_012.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_04KeyByDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_04KeyByDemo2.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_013.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_04KeyByDemo2_2.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/Ball.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_014.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_015.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/_01_ReduceDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/_02ZongHeDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/_03Union_ConnectDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day02/Demo09_cedao.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_01_SinkDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/sink/_03TextSink.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day02_02/Demo03.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/SinkFile.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/sink/Student.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_016.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "shell",
+    "file": "src/main/resources/ves1cik0ui24swqt/block_016.txt"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/sink/_05KafkaSinkDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/Demo03.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/sink/MyJdbcSink.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day03/Demo02.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/sink/PrintSinkDemo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_018.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_019.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "xml",
+    "file": "src/main/resources/ves1cik0ui24swqt/block_019.xml"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "shell",
+    "file": "src/main/resources/ves1cik0ui24swqt/block_020.txt"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "shell",
+    "file": "src/main/resources/ves1cik0ui24swqt/block_021.txt"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/smart/CarInfo.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/_01智慧交通项目之超速处理.java"
+  },
+  {
+    "doc": "Day02-Flink-普通API的使用",
+    "slug": "ves1cik0ui24swqt",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/ves1cik0ui24swqt/Snippet_023.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day01/WordCount01.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/or26ohn31g01xmmy/Snippet_001.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/or26ohn31g01xmmy/Snippet_002.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/day01/WordCount01_2.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/A.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/WordCount02.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/B.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/WordCount02_2.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/or26ohn31g01xmmy/Snippet_003.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-snippet",
+    "file": "src/main/java/com/bigdata/snippets/or26ohn31g01xmmy/Snippet_004.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "shell",
+    "file": "src/main/resources/or26ohn31g01xmmy/block_004.txt"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/WordCount02_3.java"
+  },
+  {
+    "doc": "Day01-Flink-安装与入门",
+    "slug": "or26ohn31g01xmmy",
+    "kind": "java-class",
+    "file": "src/main/java/com/bigdata/WordCount03.java"
+  }
+]

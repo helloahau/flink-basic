@@ -1,0 +1,11 @@
+kafka-topics.sh --bootstrap-server bigdata01:9092 --create --partitions 1 --replication-factor 3 --topic topic1
+kafka-topics.sh --bootstrap-server bigdata01:9092 --create --partitions 1 --replication-factor 3 --topic topic2
+
+使用控制台当做kafka消息的生产者向kafka中的topic1 发送消息
+kafka-console-producer.sh  --bootstrap-server bigdata01:9092 --topic topic1
+
+消费kafka中topic2中的数据
+kafka-console-consumer.sh  --bootstrap-server bigdata01:9092 --topic topic2
+
+操作：
+通过黑窗口向topic1中发送消息，含有success字样的消息，会出现在topic2中。

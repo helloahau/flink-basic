@@ -1,0 +1,5 @@
+<property>
+<name>yarn.scheduler.capacity.resource-calculator</name>
+<!-- <value>org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator</value> -->
+<value>org.apache.hadoop.yarn.util.resource.DominantResourceCalculator</value>
+</property>

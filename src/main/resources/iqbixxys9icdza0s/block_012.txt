@@ -1,0 +1,19 @@
+bin/flink run \
+-t yarn-per-job \
+-d \
+-p 5 \
+-Drest.flamegraph.enabled=true \
+-Dyarn.application.queue=test \
+-Djobmanager.memory.process.size=1024mb \
+-Dtaskmanager.memory.process.size=2048mb \
+-Dtaskmanager.numberOfTaskSlots=2 \
+-c com.bigdata.flink.tuning.ADemo \
+/opt/myjar/flink-tuning-1.0-SNAPSHOT.jar
+
+
+启动flink
+start-dfs.sh
+start-cluster.sh
+historyserver.sh start
+
+flink run  /opt/installs/flink/examples/batch/WordCount.jar

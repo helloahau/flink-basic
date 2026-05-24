@@ -1,0 +1,4 @@
+kafka-topics.sh --bootstrap-server bigdata01:9092 --create --partitions 3 --replication-factor 3 --topic topic-car
+
+通过黑窗口发送消息：
+kafka-console-producer.sh  --bootstrap-server node01:9092 --topic topic-car
