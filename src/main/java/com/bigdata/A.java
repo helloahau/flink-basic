@@ -21,10 +21,12 @@ public class A {
         env.setParallelism(1);
 
         // TODO 从文件读： 新Source架构
+        // default to datas/wc.txt when no argument is provided
+        String filePath = (args.length > 0) ? args[0] : "datas/wc.txt";
         FileSource<String> fileSource = FileSource
                 .forRecordStreamFormat(
                         new TextLineInputFormat(),
-                        new Path(args[0])
+                        new Path(filePath)
                 )
                 .build();
 

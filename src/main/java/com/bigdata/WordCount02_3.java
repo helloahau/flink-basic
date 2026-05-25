@@ -1,3 +1,5 @@
+package com.bigdata;
+
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -13,7 +15,7 @@ import java.util.Arrays;
  * Desc 演示Flink-DataStream-流批一体API完成批处理WordCount
  * 使用Java8的lambda表示完成函数式风格的WordCount
  */
-class WordCount02 {
+class WordCount02_3 {
     public static void main(String[] args) throws Exception {
         //TODO 1.env-准备环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
