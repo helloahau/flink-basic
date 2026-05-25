@@ -1,0 +1,96 @@
+# ──────────────────────────────────────────────────────────────
+# Local dev stack for flink-basic tutorial project
+#
+# Services:
+#   kafka-init-topics  – pre-creates tutorial Kafka topics (one-shot)
+#   kafka-ui           – Provectus Kafka UI  → http://localhost:8083
+#   mysql              – MySQL 8.0 (CDC-ready, binlog enabled) → localhost:3306
+#
+# ⚠️  Kafka itself is already provided by the running `lakehouse-kafka`
+#     container at localhost:9092.  This compose connects to it via
+#     the shared `lakehouse-local_lakehouse` Docker network.
+#
+# ⚠️  Add the following line to /etc/hosts so that Flink classes that
+#     hard-code "bigdata01" as the host resolve correctly:
+#       127.0.0.1  bigdata01
+# ──────────────────────────────────────────────────────────────
+
+name: flink-basic-dev
+
+services:
+
+  # ── Kafka topic initialiser (runs once, then exits) ─────────
+  # Uses host network so that "localhost:9092" resolves to the
+  # running lakehouse-kafka (which advertises itself as localhost:9092).
+  kafka-init-topics:
+    image: apache/kafka:3.7.0
+    container_name: kafka-init-topics
+    network_mode: host
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        echo "Waiting for Kafka to be ready …"
+        until /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list > /dev/null 2>&1; do
+          echo "  not ready yet, retrying in 5s …"
+          sleep 5
+        done
+        echo "Creating tutorial Kafka topics …"
+        for topic in topic1 topic2 topic-car first; do
+          /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 \
+            --create --if-not-exists \
+            --topic $$topic \
+            --partitions 3 \
+            --replication-factor 1
+          echo "  ✔ $$topic"
+        done
+        echo "Done."
+    restart: "no"
+
+  # ── Kafka UI ───────────────────────────────────────────────
+  # Also uses host network so localhost:9092 reaches lakehouse-kafka.
+  # Runs on port 8083 (8080 is taken by Trino).
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    network_mode: host
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=flink-dev-kafka
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=localhost:9092
+      - SERVER_PORT=8083
+      - DYNAMIC_CONFIG_ENABLED=true
+    restart: unless-stopped
+
+  # ── MySQL 8.0 (binlog enabled for Flink CDC) ───────────────
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=cdc_test
+    # Binlog required by Flink CDC (Debezium source)
+    command:
+      - --server-id=1
+      - --log-bin=mysql-bin
+      - --binlog-format=ROW
+      - --binlog-row-image=FULL
+      - --expire-logs-days=3
+      - --gtid-mode=ON
+      - --enforce-gtid-consistency=ON
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+
+

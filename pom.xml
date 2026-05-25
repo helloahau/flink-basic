@@ -118,7 +118,122 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.13</version>
+            <!-- Must match slf4j-api:1.7.36 pulled in by flink-streaming-java.
+                 The 2.0.x binding uses ServiceLoader (incompatible with 1.7.x API). -->
+            <version>1.7.36</version>
+        </dependency>
+
+        <!-- ── Iceberg batch demos (com.bigdata.iceberg.*) ─────────────
+             iceberg-flink-runtime-2.1 is the fat jar for Flink 2.x;
+             it embeds Iceberg core, Parquet, ORC, Avro and all catalog
+             implementations (Hadoop, REST/Nessie, Hive, AWS S3FileIO).
+             Use compile scope so the classes are available in IntelliJ.  -->
+        <dependency>
+            <groupId>org.apache.iceberg</groupId>
+            <artifactId>iceberg-flink-runtime-2.1</artifactId>
+            <version>1.11.0</version>
+        </dependency>
+        <!-- flink-metrics-dropwizard: Iceberg's IcebergStreamWriterMetrics static
+             initializer calls loadDropwizardCtors() which requires this jar.
+             Without it the class-level init throws ExceptionInInitializerError
+             and the IcebergStreamWriter fails to open (write job silently fails). -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-metrics-dropwizard</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <!-- Hadoop common – provides HadoopCatalog local-filesystem support.
+             3.4.3 uses SubjectUtil.current() (Java-17-safe) instead of
+             Subject.getSubject(AccessControlContext) which threw in JDK 17.0.13.
+             Logging bridges excluded to avoid conflict with slf4j-simple.  -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>3.4.3</version>
+            <exclusions>
+                <!-- zookeeper (transitive) brings slf4j-log4j12 which needs log4j 1.x -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-reload4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.reload4j</groupId>
+                    <artifactId>reload4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Optional: MinIO / S3 access (uncomment when using Nessie+MinIO catalog)
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-aws</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+        -->
+        <!-- hadoop-hdfs-client: HdfsConfiguration is loaded by Hadoop's FileSystem
+             service-loader during HadoopCatalog initialisation, even for local paths. -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs-client</artifactId>
+            <version>3.4.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- jcl-over-slf4j: provides commons-logging API, routes JCL calls → SLF4J.
+             Needed because we excluded commons-logging from hadoop-common but
+             hadoop-hdfs-client still references LogFactory at runtime. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+        <!-- hadoop-mapreduce-client-core: Iceberg's batch scan path lazily loads
+             FileInputFormat during the first read on a local filesystem. -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-core</artifactId>
+            <version>3.4.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-reload4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.reload4j</groupId>
+                    <artifactId>reload4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Ververica Flink CDC 3.0.1 — MySqlSource implements FLIP-27 Source (Flink 2.x compatible),
              no SourceFunction/addSource() needed. Provides DebeziumDeserializationSchema,
