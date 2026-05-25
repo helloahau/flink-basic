@@ -2,28 +2,17 @@
 # Local dev stack for flink-basic tutorial project
 #
 # Services:
+#   kafka              – Apache Kafka 3.7 KRaft (no ZooKeeper) → localhost:9092
 #   kafka-init-topics  – pre-creates tutorial Kafka topics (one-shot)
 #   kafka-ui           – Provectus Kafka UI    → http://localhost:8083
 #   mysql              – MySQL 8.0 (CDC-ready) → localhost:3306
 #
 # ── Iceberg Query Engines (Medallion Architecture) ──────────────
-#   trino              – Trino 450  SQL engine → http://localhost:8080
-#                        Built-in monitoring UI → http://localhost:8080/ui
-#                        Catalogs: bronze / silver / gold (Iceberg/Hadoop)
-#                        JDBC: jdbc:trino://localhost:8080
-#   dremio             – Dremio OSS data lakehouse UI
-#                        Web UI: http://localhost:9047
-#                        Add source: "NAS/Local File System" → /warehouse
-#   clickhouse         – ClickHouse 25.x OLAP engine → localhost:8123 (HTTP)
-#                        Built-in SQL Playground UI → http://localhost:8123/play
-#                        Native TCP: localhost:9000
-#   cloudbeaver        – Web-based SQL IDE (DBeaver in browser)
-#                        Web UI: http://localhost:8978
-#                        Pre-connects to both Trino and ClickHouse
-#
-# ── Shared bind-mount ────────────────────────────────────────────
-# ./flink-iceberg-warehouse/{bronze,silver,gold} is mounted as /warehouse
-# in all query-engine containers.
+#   iceberg-rest-bronze/silver/gold  – REST catalog bridges (8181-8183)
+#   trino              – Trino 443+Temurin21  → http://localhost:8080/ui
+#   dremio             – Dremio OSS UI        → http://localhost:9047
+#   clickhouse         – ClickHouse Playground → http://localhost:8123/play
+#   cloudbeaver        – Web SQL IDE           → http://localhost:8978
 # ──────────────────────────────────────────────────────────────
 
 name: flink-basic-dev
@@ -38,13 +27,52 @@ x-iceberg-warehouse: &iceberg-warehouse
 
 services:
 
+  # ── Apache Kafka 3.7 — KRaft mode (no ZooKeeper) ──────────────
+  # Single-broker on host network so Flink jobs (run outside Docker),
+  # kafka-ui, and kafka-init-topics can all reach it at localhost:9092.
+  kafka:
+    build:
+      context: ./docker/kafka
+      dockerfile: Dockerfile
+    image: flink-basic-kafka:3.7-temurin21
+    container_name: kafka
+    network_mode: host
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9093
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS=0
+      - KAFKA_LOG_DIRS=/var/lib/kafka/data
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
   # ── Kafka topic initialiser (runs once, then exits) ─────────
-  # Uses host network so that "localhost:9092" resolves to the
-  # running lakehouse-kafka (which advertises itself as localhost:9092).
   kafka-init-topics:
-    image: apache/kafka:3.7.0
+    build:
+      context: ./docker/kafka
+      dockerfile: Dockerfile
+    image: flink-basic-kafka:3.7-temurin21
     container_name: kafka-init-topics
     network_mode: host
+    depends_on:
+      kafka:
+        condition: service_healthy
     entrypoint: ["/bin/bash", "-c"]
     command:
       - |
@@ -319,6 +347,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  kafka_data:
   mysql_data:
   dremio_data:
   clickhouse_data:
