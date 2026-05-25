@@ -3,19 +3,38 @@
 #
 # Services:
 #   kafka-init-topics  – pre-creates tutorial Kafka topics (one-shot)
-#   kafka-ui           – Provectus Kafka UI  → http://localhost:8083
-#   mysql              – MySQL 8.0 (CDC-ready, binlog enabled) → localhost:3306
+#   kafka-ui           – Provectus Kafka UI    → http://localhost:8083
+#   mysql              – MySQL 8.0 (CDC-ready) → localhost:3306
 #
-# ⚠️  Kafka itself is already provided by the running `lakehouse-kafka`
-#     container at localhost:9092.  This compose connects to it via
-#     the shared `lakehouse-local_lakehouse` Docker network.
+# ── Iceberg Query Engines (Medallion Architecture) ──────────────
+#   trino              – Trino 450  SQL engine → http://localhost:8080
+#                        Built-in monitoring UI → http://localhost:8080/ui
+#                        Catalogs: bronze / silver / gold (Iceberg/Hadoop)
+#                        JDBC: jdbc:trino://localhost:8080
+#   dremio             – Dremio OSS data lakehouse UI
+#                        Web UI: http://localhost:9047
+#                        Add source: "NAS/Local File System" → /warehouse
+#   clickhouse         – ClickHouse 25.x OLAP engine → localhost:8123 (HTTP)
+#                        Built-in SQL Playground UI → http://localhost:8123/play
+#                        Native TCP: localhost:9000
+#   cloudbeaver        – Web-based SQL IDE (DBeaver in browser)
+#                        Web UI: http://localhost:8978
+#                        Pre-connects to both Trino and ClickHouse
 #
-# ⚠️  Add the following line to /etc/hosts so that Flink classes that
-#     hard-code "bigdata01" as the host resolve correctly:
-#       127.0.0.1  bigdata01
+# ── Shared bind-mount ────────────────────────────────────────────
+# ./flink-iceberg-warehouse/{bronze,silver,gold} is mounted as /warehouse
+# in all query-engine containers.
 # ──────────────────────────────────────────────────────────────
 
 name: flink-basic-dev
+
+# ── Shared bind-mount: Flink writes here; query engines read here ──
+# Create the directory before `docker compose up`:
+#   mkdir -p ./flink-iceberg-warehouse/{bronze,silver,gold}
+x-iceberg-warehouse: &iceberg-warehouse
+  type: bind
+  source: ./flink-iceberg-warehouse
+  target: /warehouse
 
 services:
 
@@ -89,8 +108,218 @@ services:
       start_period: 30s
     restart: unless-stopped
 
+  # ══════════════════════════════════════════════════════════════
+  #  ICEBERG QUERY ENGINES — Medallion Architecture
+  # ══════════════════════════════════════════════════════════════
+
+  # ── Iceberg REST catalog servers (one per Medallion layer) ────
+  # tabulario/iceberg-rest wraps HadoopCatalog with the Iceberg REST API.
+  # Trino 443+ no longer supports catalog-type=hadoop directly;
+  # it requires a REST, Hive Metastore, Glue, or Nessie catalog.
+  # These three lightweight servers bridge that gap so that BOTH
+  # Flink (HadoopCatalog) and Trino (REST) share the same files.
+  iceberg-rest-bronze:
+    image: tabulario/iceberg-rest:latest
+    container_name: iceberg-rest-bronze
+    ports:
+      - "8181:8181"
+    environment:
+      - CATALOG_CATALOG__IMPL=org.apache.iceberg.hadoop.HadoopCatalog
+      - CATALOG_WAREHOUSE=/warehouse/bronze
+      - CATALOG_IO__IMPL=org.apache.iceberg.hadoop.HadoopFileIO
+    volumes:
+      - <<: *iceberg-warehouse
+    restart: unless-stopped
+
+  iceberg-rest-silver:
+    image: tabulario/iceberg-rest:latest
+    container_name: iceberg-rest-silver
+    ports:
+      - "8182:8181"
+    environment:
+      - CATALOG_CATALOG__IMPL=org.apache.iceberg.hadoop.HadoopCatalog
+      - CATALOG_WAREHOUSE=/warehouse/silver
+      - CATALOG_IO__IMPL=org.apache.iceberg.hadoop.HadoopFileIO
+    volumes:
+      - <<: *iceberg-warehouse
+    restart: unless-stopped
+
+  iceberg-rest-gold:
+    image: tabulario/iceberg-rest:latest
+    container_name: iceberg-rest-gold
+    ports:
+      - "8183:8181"
+    environment:
+      - CATALOG_CATALOG__IMPL=org.apache.iceberg.hadoop.HadoopCatalog
+      - CATALOG_WAREHOUSE=/warehouse/gold
+      - CATALOG_IO__IMPL=org.apache.iceberg.hadoop.HadoopFileIO
+    volumes:
+      - <<: *iceberg-warehouse
+    restart: unless-stopped
+
+  # ── Trino ─────────────────────────────────────────────────────
+  # ⚠️  trinodb/trino ARM64 images bundle Adoptium JDK which crashes
+  #     with SIGILL on Apple Silicon Docker Desktop.
+  #     We use a custom Dockerfile that replaces it with Temurin 21.
+  #     Run `docker-compose build trino` once before `docker-compose up`.
+  #
+  # Catalogs: bronze / silver / gold  → via Iceberg REST catalog servers
+  # Connect:
+  #   DBeaver:  Driver=Trino, URL=jdbc:trino://localhost:8080, user=admin
+  #   CLI:      docker exec -it trino trino
+  # Sample queries:
+  #   SHOW CATALOGS;
+  #   SELECT * FROM bronze.flink_demo.water_sensors LIMIT 20;
+  #   SELECT s.id, s.vc, g.avg_vc
+  #   FROM silver.flink_demo.sensor_cleaned s
+  #   JOIN gold.flink_demo.sensor_hourly_stats g ON s.id=g.sensor_id
+  #   WHERE s.status='HIGH';
+  trino:
+    build:
+      context: ./docker/trino
+      dockerfile: Dockerfile
+    image: flink-basic-trino:443-temurin21
+    container_name: trino
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/trino/etc/config.properties:/etc/trino/config.properties:ro
+      - ./docker/trino/etc/node.properties:/etc/trino/node.properties:ro
+      # jvm.config intentionally NOT mounted — Trino's built-in jvm.config
+      # contains the required -agentpath:/usr/lib/trino/bin/libjvmkill.so
+      # line; overriding it breaks Java detection on Apple Silicon.
+      - ./docker/trino/etc/log.properties:/etc/trino/log.properties:ro
+      - ./docker/trino/catalog:/etc/trino/catalog:ro
+      - <<: *iceberg-warehouse
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx2g
+    depends_on:
+      - iceberg-rest-bronze
+      - iceberg-rest-silver
+      - iceberg-rest-gold
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/v1/info"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+    restart: unless-stopped
+
+  # ── Dremio OSS ────────────────────────────────────────────────
+  # Best-in-class Iceberg UI + reflections (auto-accelerated queries)
+  #
+  # First-time setup (Web UI → http://localhost:9047):
+  #   1. Create admin account (any credentials you like)
+  #   2. "Add Source" → "NAS / Local File System"
+  #      Path: /warehouse
+  #      Name: iceberg_warehouse
+  #   3. Under iceberg_warehouse, browse:
+  #        bronze/flink_demo/water_sensors
+  #        silver/flink_demo/sensor_cleaned
+  #        gold/flink_demo/sensor_hourly_stats
+  #   4. Right-click any folder → "Format as Iceberg Table"
+  #   5. Query in the SQL editor or save as Virtual Dataset
+  #
+  # JDBC (BI tools):
+  #   Driver: Arrow Flight SQL  →  jdbc:arrow-flight-sql://localhost:32010
+  #   OR Dremio ODBC connector  →  host=localhost port=31010
+  dremio:
+    image: dremio/dremio-oss:latest
+    container_name: dremio
+    ports:
+      - "9047:9047"    # Web UI + REST API
+      - "31010:31010"  # ODBC / JDBC (Dremio native)
+      - "32010:32010"  # Arrow Flight SQL
+    volumes:
+      - dremio_data:/opt/dremio/data
+      - <<: *iceberg-warehouse
+    environment:
+      # Minimum required by Dremio is 4 GB — do not set lower
+      - DREMIO_MAX_MEMORY_SIZE_MB=4096
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:9047/apiv2/server_status"]
+      interval: 20s
+      timeout: 10s
+      retries: 15
+      start_period: 90s
+    restart: unless-stopped
+
+  # ── ClickHouse 25.x ───────────────────────────────────────────
+  # ClickHouse-style OLAP engine with Iceberg table engine
+  # (nearest to ClickHouse analytics experience)
+  #
+  # Connect:
+  #   HTTP API:  http://localhost:8123   (curl / DBeaver HTTP driver)
+  #   Native:    clickhouse://localhost:9000
+  #   CLI:       docker exec -it clickhouse clickhouse-client
+  #
+  # Sample queries (tables created by initdb script automatically):
+  #   SELECT * FROM bronze.water_sensors LIMIT 10;
+  #   SELECT status, count() FROM silver.sensor_cleaned GROUP BY status;
+  #   SELECT sensor_id, avg_vc, high_count
+  #   FROM gold.sensor_hourly_stats ORDER BY high_count DESC;
+  #
+  # Cross-layer JOIN:
+  #   SELECT s.id, s.vc, g.avg_vc
+  #   FROM   silver.sensor_cleaned  s
+  #   JOIN   gold.sensor_hourly_stats g ON s.id = g.sensor_id
+  #   WHERE  s.status = 'HIGH';
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.4
+    container_name: clickhouse
+    ports:
+      - "8123:8123"   # HTTP interface (DBeaver, curl, Grafana)
+      - "9000:9000"   # Native TCP interface (clickhouse-client)
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./docker/clickhouse/config/custom.xml:/etc/clickhouse-server/config.d/custom.xml:ro
+      - ./docker/clickhouse/initdb:/docker-entrypoint-initdb.d:ro
+      - <<: *iceberg-warehouse
+    environment:
+      - CLICKHOUSE_DB=default
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # ── CloudBeaver — Web SQL IDE ──────────────────────────────────
+  # Browser-based DBeaver: SQL editor for Trino, ClickHouse, MySQL
+  #
+  # Web UI: http://localhost:8978
+  #
+  # First-time setup:
+  #   1. Open http://localhost:8978  → finish the wizard (create admin account)
+  #   2. "New Connection" → Trino
+  #      Host: trino   Port: 8080   User: admin
+  #   3. "New Connection" → ClickHouse
+  #      Host: clickhouse   Port: 8123   DB: default
+  #   4. Optional: "New Connection" → MySQL
+  #      Host: mysql   Port: 3306   User: root   Password: 123456
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: cloudbeaver
+    ports:
+      - "8978:8978"
+    volumes:
+      - cloudbeaver_data:/opt/cloudbeaver/workspace
+    depends_on:
+      trino:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   mysql_data:
-
-
-
+  dremio_data:
+  clickhouse_data:
+  cloudbeaver_data:

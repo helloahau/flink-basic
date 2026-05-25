@@ -46,7 +46,15 @@ import java.util.stream.StreamSupport;
  **/
 public class _03_IcebergETL {
 
-    private static final String WAREHOUSE = "./flink-iceberg-warehouse";
+    // ── Medallion Architecture: 每层独立子目录 ─────────────────────────
+    //   flink-iceberg-warehouse/
+    //     bronze/flink_demo/water_sensors      ← 原始数据 (由 _01 写入)
+    //     silver/flink_demo/sensor_cleaned     ← 清洗 + 打标签
+    //     gold/flink_demo/sensor_hourly_stats  ← 聚合指标
+    private static final String WAREHOUSE_ROOT   = "./flink-iceberg-warehouse";
+    private static final String WAREHOUSE_BRONZE = WAREHOUSE_ROOT + "/bronze";
+    private static final String WAREHOUSE_SILVER = WAREHOUSE_ROOT + "/silver";
+    private static final String WAREHOUSE_GOLD   = WAREHOUSE_ROOT + "/gold";
 
     public static void main(String[] args) throws Exception {
         HadoopCompat.initSimpleAuth();
@@ -65,22 +73,36 @@ public class _03_IcebergETL {
         env.setParallelism(1);
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
-        // ── 2. Catalog 注册 ───────────────────────────────────────────
-        tableEnv.executeSql(
-            "CREATE CATALOG IF NOT EXISTS iceberg_local WITH ("
-            + "'type'         = 'iceberg',"
-            + "'catalog-type' = 'hadoop',"
-            + "'warehouse'    = '" + WAREHOUSE + "'"
-            + ")"
-        );
-        tableEnv.useCatalog("iceberg_local");
-        tableEnv.useDatabase("flink_demo");
+        // ── 2. 三层 Catalog 注册 (每层独立 warehouse 路径) ─────────────
+        //   iceberg_bronze → ./flink-iceberg-warehouse/bronze
+        //   iceberg_silver → ./flink-iceberg-warehouse/silver
+        //   iceberg_gold   → ./flink-iceberg-warehouse/gold
+        for (String[] c : new String[][]{
+                {"iceberg_bronze", WAREHOUSE_BRONZE},
+                {"iceberg_silver", WAREHOUSE_SILVER},
+                {"iceberg_gold",   WAREHOUSE_GOLD}}) {
+            tableEnv.executeSql(
+                "CREATE CATALOG IF NOT EXISTS " + c[0] + " WITH ("
+                + "'type'         = 'iceberg',"
+                + "'catalog-type' = 'hadoop',"
+                + "'warehouse'    = '" + c[1] + "'"
+                + ")"
+            );
+            // 确保每层的 flink_demo 数据库存在
+            tableEnv.useCatalog(c[0]);
+            tableEnv.executeSql("CREATE DATABASE IF NOT EXISTS flink_demo");
+        }
 
         // ====================================================================
         //  STEP 1 – ETL: Bronze → Silver  (Flink INSERT INTO ... SELECT)
         // ====================================================================
         System.out.println("\n====== STEP 1: ETL — Bronze → Silver (数据清洗) ======");
+        System.out.printf("  Bronze: %s/flink_demo/water_sensors%n", WAREHOUSE_BRONZE);
+        System.out.printf("  Silver: %s/flink_demo/sensor_cleaned%n", WAREHOUSE_SILVER);
 
+        // 目标表建在 Silver Catalog
+        tableEnv.useCatalog("iceberg_silver");
+        tableEnv.useDatabase("flink_demo");
         tableEnv.executeSql(
             "CREATE TABLE IF NOT EXISTS sensor_cleaned ("
             + "  id     STRING   COMMENT '传感器ID',"
@@ -91,17 +113,18 @@ public class _03_IcebergETL {
             + "WITH ('format-version' = '2')"
         );
 
-        // ETL: filter extreme values (vc>120=sensor fault), add status label
+        // ETL: 跨 catalog 读 Bronze → 写 Silver
+        // 源表用全限定名 iceberg_bronze.flink_demo.water_sensors
         tableEnv.executeSql(
-            "INSERT INTO sensor_cleaned "
+            "INSERT INTO iceberg_silver.flink_demo.sensor_cleaned "
             + "SELECT id, ts, vc, "
             + "  CASE WHEN vc >= 50 THEN 'HIGH' WHEN vc <= 5 THEN 'LOW' ELSE 'NORMAL' END "
-            + "FROM water_sensors WHERE vc <= 120"
+            + "FROM iceberg_bronze.flink_demo.water_sensors WHERE vc <= 120"
         ).await();   // ← wait for INSERT to commit before reading with Iceberg Java API
 
         // Verify with Iceberg Java API (no mini-cluster race condition)
         System.out.println(">>> Silver 层各状态行数：");
-        try (HadoopCatalog cat = new HadoopCatalog(new Configuration(false), WAREHOUSE)) {
+        try (HadoopCatalog cat = new HadoopCatalog(new Configuration(false), WAREHOUSE_SILVER)) {
             Table silver = cat.loadTable(TableIdentifier.of("flink_demo", "sensor_cleaned"));
             Map<String, Long> cnt = new HashMap<>();
             try (CloseableIterable<Record> recs = IcebergGenerics.read(silver).build()) {
@@ -120,7 +143,11 @@ public class _03_IcebergETL {
         //  STEP 2 – ELT: Silver → Gold  (Flink INSERT INTO ... SELECT聚合)
         // ====================================================================
         System.out.println("\n====== STEP 2: ELT — Silver → Gold (聚合指标) ======");
+        System.out.printf("  Gold: %s/flink_demo/sensor_hourly_stats%n", WAREHOUSE_GOLD);
 
+        // 目标表建在 Gold Catalog
+        tableEnv.useCatalog("iceberg_gold");
+        tableEnv.useDatabase("flink_demo");
         tableEnv.executeSql(
             "CREATE TABLE IF NOT EXISTS sensor_hourly_stats ("
             + "  sensor_id    STRING  COMMENT '传感器ID',"
@@ -135,22 +162,23 @@ public class _03_IcebergETL {
             + "WITH ('format-version' = '2')"
         );
 
+        // ELT: 跨 catalog 读 Silver → 写 Gold
         tableEnv.executeSql(
-            "INSERT INTO sensor_hourly_stats "
+            "INSERT INTO iceberg_gold.flink_demo.sensor_hourly_stats "
             + "SELECT id, ts/1000, COUNT(*), MIN(vc), MAX(vc),"
             + "  ROUND(AVG(CAST(vc AS DOUBLE)),2),"
             + "  SUM(CASE WHEN status='HIGH' THEN 1 ELSE 0 END),"
             + "  SUM(CASE WHEN status='LOW'  THEN 1 ELSE 0 END)"
-            + " FROM sensor_cleaned GROUP BY id, ts/1000"
+            + " FROM iceberg_silver.flink_demo.sensor_cleaned GROUP BY id, ts/1000"
         ).await();   // wait for Gold INSERT to complete
         System.out.println(">>> Gold 层写入完成，records=" +
-            getLatestRecordCount("sensor_hourly_stats"));
+            getLatestRecordCount(WAREHOUSE_GOLD, "sensor_hourly_stats"));
 
         // ====================================================================
         //  STEP 3 – 报表查询: Iceberg Java API 直接读 Gold 表
         // ====================================================================
         System.out.println("\n====== STEP 3: Gold 层报表查询 ======");
-        try (HadoopCatalog cat = new HadoopCatalog(new Configuration(false), WAREHOUSE)) {
+        try (HadoopCatalog cat = new HadoopCatalog(new Configuration(false), WAREHOUSE_GOLD)) {
             Table gold = cat.loadTable(TableIdentifier.of("flink_demo", "sensor_hourly_stats"));
 
             System.out.println(">>> 各传感器综合指标 (Gold 层)：");
@@ -191,20 +219,22 @@ public class _03_IcebergETL {
         // ====================================================================
         System.out.println("\n====== STEP 4: 跨 Iceberg 表 JOIN (Silver + Gold) ======");
         System.out.println(">>> HIGH 状态明细 + 该传感器最大水位：");
-        try (HadoopCatalog cat = new HadoopCatalog(new Configuration(false), WAREHOUSE)) {
-            Table silver = cat.loadTable(TableIdentifier.of("flink_demo", "sensor_cleaned"));
-            Table gold   = cat.loadTable(TableIdentifier.of("flink_demo", "sensor_hourly_stats"));
 
-            // Build max_vc per sensor from Gold
-            Map<String, Integer> maxVcBySensor = new HashMap<>();
+        // Build max_vc per sensor from Gold catalog
+        Map<String, Integer> maxVcBySensor = new HashMap<>();
+        try (HadoopCatalog goldCat = new HadoopCatalog(new Configuration(false), WAREHOUSE_GOLD)) {
+            Table gold = goldCat.loadTable(TableIdentifier.of("flink_demo", "sensor_hourly_stats"));
             try (CloseableIterable<Record> gr = IcebergGenerics.read(gold).build()) {
                 for (Record r : gr) {
                     String sid = (String) r.getField("sensor_id");
                     maxVcBySensor.merge(sid, (Integer) r.getField("max_vc"), Math::max);
                 }
             }
+        }
 
-            // Read HIGH rows from Silver and join
+        // Read HIGH rows from Silver catalog and join
+        try (HadoopCatalog silverCat = new HadoopCatalog(new Configuration(false), WAREHOUSE_SILVER)) {
+            Table silver = silverCat.loadTable(TableIdentifier.of("flink_demo", "sensor_cleaned"));
             System.out.printf("  %-5s %-8s %-5s %-8s %-12s%n", "id", "ts", "vc", "status", "sensor_max_vc");
             try (CloseableIterable<Record> sr = IcebergGenerics.read(silver)
                     .where(Expressions.equal("status", "HIGH")).build()) {
@@ -218,12 +248,12 @@ public class _03_IcebergETL {
         }
 
         System.out.println("\nIceberg ETL/ELT 批处理演示完成！");
-        System.out.printf("数据仓库目录: %s%n  Bronze: /flink_demo/water_sensors%n  Silver: /flink_demo/sensor_cleaned%n  Gold:   /flink_demo/sensor_hourly_stats%n",
-            WAREHOUSE);
+        System.out.printf("数据仓库目录: %s%n  Bronze: %s/flink_demo/water_sensors%n  Silver: %s/flink_demo/sensor_cleaned%n  Gold:   %s/flink_demo/sensor_hourly_stats%n",
+            WAREHOUSE_ROOT, WAREHOUSE_BRONZE, WAREHOUSE_SILVER, WAREHOUSE_GOLD);
     }
 
-    private static String getLatestRecordCount(String tableName) {
-        try (HadoopCatalog cat = new HadoopCatalog(new Configuration(false), WAREHOUSE)) {
+    private static String getLatestRecordCount(String warehouse, String tableName) {
+        try (HadoopCatalog cat = new HadoopCatalog(new Configuration(false), warehouse)) {
             Table t = cat.loadTable(TableIdentifier.of("flink_demo", tableName));
             return t.currentSnapshot().summary().getOrDefault("added-records", "?");
         } catch (Exception e) { return "?"; }

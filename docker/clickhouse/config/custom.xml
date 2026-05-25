@@ -1,0 +1,10 @@
+<clickhouse>
+    <!--
+      Only valid server-level overrides here.
+      Per-query / per-user settings (e.g. allow_experimental_database_iceberg)
+      belong in users.d/overrides.xml, not in config.d/.
+    -->
+    <max_concurrent_queries>50</max_concurrent_queries>
+    <max_connections>1024</max_connections>
+</clickhouse>
+

@@ -29,15 +29,15 @@ import java.security.PrivilegedExceptionAction;
  *   org.apache.iceberg:iceberg-flink-runtime-2.1:1.11.0
  *   org.apache.hadoop:hadoop-common:3.3.6
  *
- * 运行后数据位置:
- *   /tmp/flink-iceberg-warehouse/flink_demo/water_sensors/
+ * 运行后数据位置 (Medallion Architecture — Bronze 层):
+ *   ./flink-iceberg-warehouse/bronze/flink_demo/water_sensors/
  *
  * Flink UI (本地批任务不启动 Web UI；若提交到集群可访问 http://localhost:8082)
  **/
 public class _01_IcebergBatchWrite {
 
-    /** Iceberg 数据仓库本地路径（可改为 s3a://gold/warehouse 配合 MinIO） */
-    private static final String WAREHOUSE = "./flink-iceberg-warehouse";
+    /** Medallion Architecture: 原始数据写入 Bronze 层 */
+    private static final String WAREHOUSE = "./flink-iceberg-warehouse/bronze";
 
     public static void main(String[] args) throws Exception {
 
@@ -146,7 +146,7 @@ public class _01_IcebergBatchWrite {
                 System.out.printf("  %-5s %-12d %-8d%n", id, v[0], v[1]));
         }
 
-        System.out.println(">>> Iceberg 数据写入完成！数据目录: " + WAREHOUSE + "/flink_demo/water_sensors");
+        System.out.println(">>> Iceberg 数据写入完成！数据目录: " + WAREHOUSE + "/flink_demo/water_sensors  [Bronze 层]");
     }
 }
 

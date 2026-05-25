@@ -1,122 +1,322 @@
-# Local Dev Stack — Docker Setup
+# Docker Stack — flink-basic
 
-This folder contains support files for the `docker-compose.yml` at the project root.
+## Services
+
+| Service | URL / Port | Built-in UI? | Purpose |
+|---|---|---|---|
+| `kafka-ui` | http://localhost:8083 | ✅ Full UI | Kafka topic browser |
+| `mysql` | localhost:3306 | ❌ | Flink CDC source |
+| **`trino`** | http://localhost:8080 | ✅ Monitoring UI at `/ui` | Iceberg SQL engine |
+| **`dremio`** | http://localhost:9047 | ✅ Full SQL IDE + BI | Iceberg UI + virtual datasets |
+| **`clickhouse`** | localhost:8123 / 9000 | ✅ SQL Playground at `/play` | OLAP engine |
+| **`cloudbeaver`** | http://localhost:8978 | ✅ Full SQL IDE (web DBeaver) | Connects Trino + ClickHouse + MySQL |
 
 ---
 
-## Architecture
+## Iceberg Medallion Architecture
 
 ```
-Mac host (Flink JVM runs here)
-│
-│  localhost:9092 ──────► lakehouse-kafka   (existing container, apache/kafka:3.7.0)
-│  localhost:3306 ──────► mysql             (this compose, mysql:8.0)
-│  localhost:8083 ──────► kafka-ui          (this compose, provectuslabs/kafka-ui)
+flink-iceberg-warehouse/                ← host bind-mount (./flink-iceberg-warehouse)
+  bronze/flink_demo/water_sensors       ← _01_IcebergBatchWrite  (raw data)
+  silver/flink_demo/sensor_cleaned      ← _03_IcebergETL STEP 1  (cleaned)
+  gold/flink_demo/sensor_hourly_stats   ← _03_IcebergETL STEP 2  (aggregated)
 ```
 
-`kafka-ui` and `kafka-init-topics` use `network_mode: host` so that
-`localhost:9092` resolves to the running `lakehouse-kafka` broker
-(which advertises itself as `localhost:9092`).
+All query-engine containers mount this as `/warehouse`.
 
 ---
 
-## Services managed by this compose
-
-| Service | Image | Local URL | Purpose |
-|---|---|---|---|
-| **kafka-ui** | `provectuslabs/kafka-ui:latest` | http://localhost:8083 | Web UI to browse topics & messages |
-| **mysql** | `mysql:8.0` | `localhost:3306` | MySQL with binlog enabled for Flink CDC |
-| **kafka-init-topics** | `apache/kafka:3.7.0` (one-shot) | — | Pre-creates tutorial Kafka topics |
-
-> **Kafka broker** (`localhost:9092`) is provided by the pre-existing
-> `lakehouse-kafka` container — no duplicate Kafka is started.
-
-## Pre-existing lakehouse services (not managed here)
-
-These are already running and can be used by the tutorial demos:
-
-| Service | URL | Credentials | Purpose |
-|---|---|---|---|
-| **Kafka** | `localhost:9092` | — | Message broker |
-| **Flink UI** | http://localhost:8082 | — | Flink JobManager Web UI (1.18.1 cluster) |
-| **MinIO Console** | http://localhost:9001 | `minioadmin` / `minioadmin123` | S3-compatible object storage |
-| **MinIO API** | `http://localhost:9000` | `minioadmin` / `minioadmin123` | Iceberg S3 storage endpoint |
-| **Nessie** | `http://localhost:19120` | — | Iceberg REST catalog (`/iceberg` path) |
-
-Buckets in MinIO: `bronze`, `silver`, `gold` (warehouse), `scratch`
-
----
-
-## Quick Start
+## Prerequisites
 
 ```bash
-# 1. Start all services
-cd /Volumes/Work/Flink/Project/basic
+mkdir -p ./flink-iceberg-warehouse/{bronze,silver,gold}
+```
+
+---
+
+## Trino
+
+### Built-in UIs
+| URL | What it shows |
+|---|---|
+| http://localhost:8080/ui | **Monitoring dashboard** — running queries, cluster nodes, memory, query history |
+
+> Trino's built-in UI is **read-only monitoring**, not a SQL editor.  
+> Use **CloudBeaver** (http://localhost:8978) or DBeaver desktop for SQL editing.
+
+### CLI
+```bash
+docker exec -it trino trino
+```
+
+### Sample SQL (3 catalogs — bronze / silver / gold)
+```sql
+SHOW CATALOGS;
+
+SELECT * FROM bronze.flink_demo.water_sensors LIMIT 20;
+
+SELECT status, COUNT(*) AS cnt
+FROM silver.flink_demo.sensor_cleaned GROUP BY status;
+
+-- Cross-layer JOIN
+SELECT s.id, s.vc, s.status, g.avg_vc
+FROM   silver.flink_demo.sensor_cleaned s
+JOIN   gold.flink_demo.sensor_hourly_stats g ON s.id = g.sensor_id
+WHERE  s.status = 'HIGH' ORDER BY s.ts;
+```
+
+### DBeaver / CloudBeaver Connection
+- Driver: **Trino** · URL: `jdbc:trino://localhost:8080` · User: `admin` (no password)
+
+---
+
+## ClickHouse
+
+### Built-in UIs
+| URL | What it shows |
+|---|---|
+| http://localhost:8123/play | **SQL Playground** — full SQL editor in browser, instant results |
+
+> Open http://localhost:8123/play and start querying immediately — no login needed.
+
+### CLI
+```bash
+docker exec -it clickhouse clickhouse-client
+```
+
+### Sample SQL (databases: bronze / silver / gold)
+```sql
+SELECT * FROM bronze.water_sensors LIMIT 10;
+
+SELECT status, count() AS cnt
+FROM silver.sensor_cleaned GROUP BY status ORDER BY cnt DESC;
+
+SELECT sensor_id, avg_vc, high_count
+FROM gold.sensor_hourly_stats ORDER BY high_count DESC;
+
+-- Cross-layer JOIN
+SELECT s.id, s.ts, s.vc, g.avg_vc
+FROM silver.sensor_cleaned s
+JOIN gold.sensor_hourly_stats g ON s.id = g.sensor_id
+WHERE s.status = 'HIGH';
+```
+
+### DBeaver / CloudBeaver Connection
+- Driver: **ClickHouse** · Host: `localhost` · Port: `8123` · User: `default`
+
+---
+
+## Dremio
+
+Full SQL IDE + BI dashboard + Iceberg reflections (automatic query acceleration).
+
+### First-time setup (http://localhost:9047)
+1. Create admin account.
+2. **Add Source** → **NAS / Local File System** → Path: `/warehouse` → Name: `iceberg_warehouse`
+3. Navigate to `bronze/flink_demo/water_sensors`, right-click → **Format as Iceberg Table**
+4. Repeat for `silver/…/sensor_cleaned` and `gold/…/sensor_hourly_stats`
+5. Use the built-in SQL editor or create Virtual Datasets (saved views).
+
+---
+
+## CloudBeaver (Web SQL IDE)
+
+Browser-based DBeaver — single UI connecting to **all** databases.
+
+### Setup (http://localhost:8978)
+1. Open UI → finish the admin-account wizard.
+2. **New Connection** → **Trino**
+   - Host: `trino` · Port: `8080` · User: `admin`
+3. **New Connection** → **ClickHouse**
+   - Host: `clickhouse` · Port: `8123` · User: `default`
+4. Optional: **New Connection** → **MySQL**
+   - Host: `mysql` · Port: `3306` · User: `root` · Password: `123456`
+
+---
+
+## Start Everything
+
+```bash
+# 1. Prepare warehouse directories (one-time)
+mkdir -p ./flink-iceberg-warehouse/{bronze,silver,gold}
+
+# 2. Start all services
 docker-compose up -d
 
-# 2. Open Kafka UI
-open http://localhost:8083
+# 3. Run Flink jobs to populate data
+#    _01_IcebergBatchWrite → bronze/flink_demo/water_sensors
+#    _03_IcebergETL        → silver/… + gold/…
 
-# 3. Connect to MySQL
-mysql -h 127.0.0.1 -P 3306 -u root -p123456 cdc_test
+# 4. Query
+open http://localhost:8978    # CloudBeaver  — SQL IDE for Trino + ClickHouse
+open http://localhost:8080/ui # Trino        — monitoring dashboard
+open http://localhost:8123/play # ClickHouse — SQL Playground
+open http://localhost:9047    # Dremio       — full BI + SQL IDE
 ```
+
+## Services
+
+| Service | URL / Port | Purpose |
+|---|---|---|
+| `kafka-ui` | http://localhost:8083 | Kafka topic browser |
+| `mysql` | localhost:3306 | Flink CDC source |
+| **`trino`** | http://localhost:8080 | Iceberg SQL engine (DBeaver-friendly) |
+| **`dremio`** | http://localhost:9047 | Iceberg UI + virtual datasets |
+| **`clickhouse`** | localhost:8123 (HTTP) / 9000 (native) | OLAP engine (ClickHouse-style) |
 
 ---
 
-## ⚠️  Hostname `bigdata01`
-
-Several source files hard-code `bigdata01` as the Kafka/MySQL host
-(e.g. `FlinkCDC.java`, `_03FinkCore_taopai.java`).
-Add the following line to `/etc/hosts`:
-
-```
-127.0.0.1  bigdata01
-```
+## Prerequisites
 
 ```bash
-sudo sh -c 'echo "127.0.0.1  bigdata01" >> /etc/hosts'
+# Create warehouse subdirectories before first `docker compose up`
+mkdir -p ./flink-iceberg-warehouse/{bronze,silver,gold}
 ```
 
 ---
 
-## Kafka Topics
+## Iceberg Medallion Architecture
 
-The `kafka-init-topics` one-shot container pre-creates:
+```
+flink-iceberg-warehouse/          ← host bind-mount (./flink-iceberg-warehouse)
+  bronze/flink_demo/water_sensors      ← raw data  (_01_IcebergBatchWrite)
+  silver/flink_demo/sensor_cleaned     ← cleaned   (_03_IcebergETL STEP 1)
+  gold/flink_demo/sensor_hourly_stats  ← aggregated (_03_IcebergETL STEP 2)
+```
 
-| Topic | Used by |
-|---|---|
-| `topic1` | `KafkaExactlyOnceDemo`, `SocketToKafkaTwoPhaseDemo`, `flinksql/day02` demos |
-| `topic2` | `flinksql/day02/_002Demo` (output topic) |
-| `topic-car` | `_01智慧交通项目之超速处理`, `_05_智慧交通超速车辆sql版本` |
-| `first` | `day07/Demo03_sql` |
-
-Topics are also auto-created on first use (Kafka default).
+All three engines mount this directory as `/warehouse`.
 
 ---
 
-## MySQL / CDC
+## Trino
 
-- **Host**: `localhost:3306` (also `bigdata01:3306` after `/etc/hosts` edit)
-- **Database**: `cdc_test` — table `user_info(id, name, age)`, seeded with 4 rows
-- **Root password**: `123456`
-- Binlog enabled with `ROW` format + GTID — required by Flink CDC (Debezium).
+### Start
+```bash
+docker compose up -d trino
+```
 
-Simulate CDC events:
+### CLI
+```bash
+docker exec -it trino trino
+```
+
+### Sample SQL
 ```sql
-USE cdc_test;
-INSERT INTO user_info (name, age) VALUES ('Eve', 22);
-UPDATE user_info SET age = 31 WHERE name = 'Alice';
-DELETE FROM user_info WHERE name = 'Bob';
+SHOW CATALOGS;
+-- bronze, silver, gold
+
+SHOW TABLES IN bronze.flink_demo;
+
+SELECT * FROM bronze.flink_demo.water_sensors LIMIT 20;
+
+SELECT status, COUNT(*) AS cnt
+FROM silver.flink_demo.sensor_cleaned
+GROUP BY status;
+
+-- Cross-layer JOIN
+SELECT s.id, s.vc, s.status, g.avg_vc
+FROM   silver.flink_demo.sensor_cleaned s
+JOIN   gold.flink_demo.sensor_hourly_stats g ON s.id = g.sensor_id
+WHERE  s.status = 'HIGH'
+ORDER  BY s.ts;
 ```
+
+### DBeaver Connection
+- Driver: **Trino**
+- URL: `jdbc:trino://localhost:8080`
+- User: `admin` (no password)
 
 ---
 
-## Stop / Teardown
+## Dremio
+
+### Start
+```bash
+docker compose up -d dremio
+```
+
+### First-time Setup (Web UI → http://localhost:9047)
+1. Create an admin account (any credentials).
+2. **Add Source** → **NAS / Local File System**
+   - Path: `/warehouse`
+   - Name: `iceberg_warehouse`
+3. Browse the folders:
+   - `bronze/flink_demo/water_sensors`
+   - `silver/flink_demo/sensor_cleaned`
+   - `gold/flink_demo/sensor_hourly_stats`
+4. Right-click each folder → **Format as Iceberg Table** → Save.
+5. Use the SQL editor or create **Virtual Datasets** (saved views).
+
+### JDBC / BI Tools
+| Protocol | Connection String |
+|---|---|
+| Arrow Flight SQL | `jdbc:arrow-flight-sql://localhost:32010` |
+| Native ODBC | host=`localhost` port=`31010` |
+
+---
+
+## ClickHouse
+
+### Start
+```bash
+docker compose up -d clickhouse
+```
+
+The `initdb` script (`docker/clickhouse/initdb/01_iceberg_tables.sql`) runs
+automatically on first start and creates the three Iceberg external tables.
+
+### CLI
+```bash
+docker exec -it clickhouse clickhouse-client
+```
+
+### Sample SQL
+```sql
+-- Bronze
+SELECT * FROM bronze.water_sensors LIMIT 10;
+
+-- Silver — status distribution
+SELECT status, count() AS cnt
+FROM silver.sensor_cleaned
+GROUP BY status
+ORDER BY cnt DESC;
+
+-- Gold — top sensors by HIGH alert count
+SELECT sensor_id, record_count, avg_vc, high_count, low_count
+FROM gold.sensor_hourly_stats
+ORDER BY high_count DESC
+LIMIT 10;
+
+-- Cross-layer JOIN (Silver detail + Gold aggregate)
+SELECT s.id, s.ts, s.vc, s.status, g.avg_vc, g.high_count
+FROM silver.sensor_cleaned  s
+JOIN gold.sensor_hourly_stats g ON s.id = g.sensor_id
+WHERE s.status = 'HIGH'
+ORDER BY s.ts;
+```
+
+### DBeaver Connection
+- Driver: **ClickHouse** (or HTTP driver at `http://localhost:8123`)
+- Host: `localhost` Port: `8123`
+- User: `default` (no password by default)
+
+---
+
+## Start Everything
 
 ```bash
-# Stop containers (keep MySQL data volume)
-docker-compose down
+# 1. Prepare warehouse directories
+mkdir -p ./flink-iceberg-warehouse/{bronze,silver,gold}
 
-# Full reset including MySQL data
-docker-compose down -v
+# 2. Start all services
+docker compose up -d
+
+# 3. Run Flink jobs to populate data
+#    _01_IcebergBatchWrite  → bronze
+#    _03_IcebergETL          → silver + gold
+
+# 4. Query with any engine
+docker exec -it trino trino                    # Trino CLI
+open http://localhost:9047                     # Dremio Web UI
+docker exec -it clickhouse clickhouse-client  # ClickHouse CLI
 ```

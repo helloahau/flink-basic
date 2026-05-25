@@ -39,7 +39,8 @@ import java.security.PrivilegedExceptionAction;
  **/
 public class _02_IcebergBatchRead {
 
-    private static final String WAREHOUSE = "./flink-iceberg-warehouse";
+    /** Reads from the Bronze layer — must match _01_IcebergBatchWrite */
+    private static final String WAREHOUSE = "./flink-iceberg-warehouse/bronze";
 
     public static void main(String[] args) throws Exception {
         HadoopCompat.initSimpleAuth();

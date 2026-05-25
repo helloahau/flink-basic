@@ -1,0 +1,32 @@
+-- ──────────────────────────────────────────────────────────────────
+-- ClickHouse Iceberg External Tables — Medallion Architecture
+-- Bronze / Silver / Gold layers mapped from Hadoop-catalog warehouse
+--
+-- Run after ClickHouse starts:
+--   docker exec -i clickhouse clickhouse-client < /docker-entrypoint-initdb.d/01_iceberg_tables.sql
+-- ──────────────────────────────────────────────────────────────────
+
+-- ── Bronze Layer ──────────────────────────────────────────────────
+-- Raw sensor records written by Flink (_01_IcebergBatchWrite)
+CREATE DATABASE IF NOT EXISTS bronze;
+
+CREATE TABLE IF NOT EXISTS bronze.water_sensors
+ENGINE = Iceberg('/warehouse/bronze/flink_demo/water_sensors')
+COMMENT 'Bronze: raw WaterSensor data from Flink';
+
+-- ── Silver Layer ──────────────────────────────────────────────────
+-- Cleaned + status-labelled records (_03_IcebergETL STEP 1)
+CREATE DATABASE IF NOT EXISTS silver;
+
+CREATE TABLE IF NOT EXISTS silver.sensor_cleaned
+ENGINE = Iceberg('/warehouse/silver/flink_demo/sensor_cleaned')
+COMMENT 'Silver: cleaned sensor data with LOW/NORMAL/HIGH status';
+
+-- ── Gold Layer ────────────────────────────────────────────────────
+-- Hourly aggregated metrics (_03_IcebergETL STEP 2)
+CREATE DATABASE IF NOT EXISTS gold;
+
+CREATE TABLE IF NOT EXISTS gold.sensor_hourly_stats
+ENGINE = Iceberg('/warehouse/gold/flink_demo/sensor_hourly_stats')
+COMMENT 'Gold: per-sensor hourly aggregated stats';
+
