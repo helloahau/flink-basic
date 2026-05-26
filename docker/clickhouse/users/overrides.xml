@@ -1,0 +1,11 @@
+<clickhouse>
+    <profiles>
+        <default>
+            <!-- Enable ClickHouse Iceberg REST catalog (DataLakeCatalog ENGINE) -->
+            <allow_experimental_database_iceberg>1</allow_experimental_database_iceberg>
+            <!-- Allow reading Parquet/Iceberg files from user_files_path -->
+            <allow_experimental_object_type>1</allow_experimental_object_type>
+        </default>
+    </profiles>
+</clickhouse>
+

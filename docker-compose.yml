@@ -301,6 +301,7 @@ services:
     volumes:
       - clickhouse_data:/var/lib/clickhouse
       - ./docker/clickhouse/config/custom.xml:/etc/clickhouse-server/config.d/custom.xml:ro
+      - ./docker/clickhouse/users/overrides.xml:/etc/clickhouse-server/users.d/overrides.xml:ro
       - ./docker/clickhouse/initdb:/docker-entrypoint-initdb.d:ro
       - <<: *iceberg-warehouse
     environment:

@@ -259,11 +259,23 @@ docker compose up -d dremio
 
 ### Start
 ```bash
-docker compose up -d clickhouse
+docker-compose up -d clickhouse
 ```
 
-The `initdb` script (`docker/clickhouse/initdb/01_iceberg_tables.sql`) runs
-automatically on first start and creates the three Iceberg external tables.
+Tables are created automatically from Parquet files via `initdb/02_iceberg_tables_from_parquet.sql`
+(runs once when the volume is fresh; tables survive container restarts via MergeTree storage).
+
+> **Why Parquet, not `IcebergLocal`?**  
+> Flink's `HadoopCatalog` writes Iceberg metadata with the warehouse path recorded as a **relative path**
+> (e.g. `./flink-iceberg-warehouse/bronze/…`).  ClickHouse's `icebergLocal()` requires the path in
+> metadata to exactly match the path given to the function.  Reading Parquet files directly sidesteps
+> this and is idiomatic ClickHouse — it's how most ClickHouse Iceberg integrations work with local data.
+
+### Re-load tables after new Flink runs
+```bash
+# Run after _01_IcebergBatchWrite or _03_IcebergETL to sync new data
+docker exec clickhouse clickhouse-client --queries-file /docker-entrypoint-initdb.d/02_iceberg_tables_from_parquet.sql
+```
 
 ### CLI
 ```bash
@@ -272,33 +284,29 @@ docker exec -it clickhouse clickhouse-client
 
 ### Sample SQL
 ```sql
--- Bronze
+SHOW DATABASES;                          -- bronze, silver, gold
+SHOW TABLES IN bronze;                   -- water_sensors
+SHOW TABLES IN silver;                   -- sensor_cleaned
+SHOW TABLES IN gold;                     -- sensor_hourly_stats
+
 SELECT * FROM bronze.water_sensors LIMIT 10;
 
--- Silver — status distribution
 SELECT status, count() AS cnt
-FROM silver.sensor_cleaned
-GROUP BY status
-ORDER BY cnt DESC;
+FROM silver.sensor_cleaned GROUP BY status ORDER BY cnt DESC;
 
--- Gold — top sensors by HIGH alert count
-SELECT sensor_id, record_count, avg_vc, high_count, low_count
-FROM gold.sensor_hourly_stats
-ORDER BY high_count DESC
-LIMIT 10;
+SELECT sensor_id, max_vc, high_count
+FROM gold.sensor_hourly_stats ORDER BY high_count DESC;
 
--- Cross-layer JOIN (Silver detail + Gold aggregate)
-SELECT s.id, s.ts, s.vc, s.status, g.avg_vc, g.high_count
+-- Cross-layer JOIN
+SELECT s.id, s.ts, s.vc, g.avg_vc
 FROM silver.sensor_cleaned  s
 JOIN gold.sensor_hourly_stats g ON s.id = g.sensor_id
-WHERE s.status = 'HIGH'
-ORDER BY s.ts;
+WHERE s.status = 'HIGH';
 ```
 
-### DBeaver Connection
-- Driver: **ClickHouse** (or HTTP driver at `http://localhost:8123`)
-- Host: `localhost` Port: `8123`
-- User: `default` (no password by default)
+### DBeaver / CloudBeaver Connection
+- Driver: **ClickHouse** · Host: `localhost` · Port: `8123` · User: `default` (no password)
+- Or open **http://localhost:8123/play** directly in browser
 
 ---
 
